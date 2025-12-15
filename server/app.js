@@ -3,7 +3,8 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const globalErrorHandler = require("./controllers/error.controller");
-const path = require("path");
+const cookieParser = require("cookie-parser");
+// const path = require("path");
 
 // routers
 const laptopRouter = require("./routers/laptop.router");
@@ -14,8 +15,9 @@ dotenv.config()
 const app = express();
 
 // middlewares
-app.use(cors())
-app.use(express.json())
+app.use(cors());
+app.use(express.json());
+app.use(cookieParser());
 
 // app.use("/laptops/images", express.static(path.join(__dirname, "uploads/laptops")))
 
