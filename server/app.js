@@ -7,6 +7,7 @@ const path = require("path");
 
 // routers
 const laptopRouter = require("./routers/laptop.router");
+const authRouter = require("./routers/auth.router");
 
 dotenv.config()
 
@@ -19,7 +20,8 @@ app.use(express.json())
 // app.use("/laptops/images", express.static(path.join(__dirname, "uploads/laptops")))
 
 // using routers
-app.use("/api/laptops", laptopRouter)
+app.use("/api/laptops", laptopRouter);
+app.use("/api/auth", authRouter)
 
 // global error handler
 app.use(globalErrorHandler)
