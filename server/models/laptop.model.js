@@ -45,7 +45,16 @@ const laptopSchema = mongoose.Schema(
             type: Number,
             default: 0
         },
-        images: [String],
+        images: [{
+            public_id: {
+                type: String,
+                required: true
+            },
+            url: {
+                type: String,
+                required: true
+            }
+        }],
         description: {
             type: String,
             trim: true

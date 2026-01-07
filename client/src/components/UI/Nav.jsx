@@ -14,6 +14,11 @@ const Nav = () => {
                             Home
                         </Link>
                     </li>
+                    <li>
+                        <Link to="/laptops">
+                            Laptops
+                        </Link>
+                    </li>
 
                     {
                         user ? (
@@ -33,7 +38,7 @@ const Nav = () => {
                             <>
                                 <li>
                                     <Link to="/login">
-                                    Login
+                                        Login
                                     </Link>
                                 </li>
                                 <li>
@@ -46,6 +51,8 @@ const Nav = () => {
                     }
                 </ul>
             </nav>
+
+            <hr/>
         </header>
     );
 };

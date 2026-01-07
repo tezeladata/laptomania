@@ -1,7 +1,7 @@
 const catchAsync = require("../utils/catchAsync.js");
 const Laptop = require("../models/laptop.model.js")
 const AppError = require("../utils/appError.js");
-const imageUpload = require("../utils/image.js");
+const {imageUpload, deleteImage} = require("../utils/image.js");
 
 // Add a new laptop
 const addLaptop = catchAsync(async (req, res) => {
@@ -9,7 +9,10 @@ const addLaptop = catchAsync(async (req, res) => {
     const images = req.files.map(file => file.path);
 
     const result = await imageUpload("laptops", images);
-    const imageUrls = result.map(img => img.secure_url);
+    const imageUrls = result.map(img => ({
+        url: img.secure_url,
+        public_id: img.public_id
+    }));
 
     body.images = imageUrls
 
@@ -40,6 +43,10 @@ const getLaptop = catchAsync(async (req, res, next) => {
 const deleteLaptop = catchAsync(async (req, res, next) => {
     const {id} = req.params;
     const laptop = await Laptop.findByIdAndDelete(id);
+    const promises = laptop.images.map(img => deleteImage(img.public_id));
+    const result = await Promise.all(promises)
+
+    console.log(result)
 
     if (!laptop){
         return next(new AppError("Laptop not found", 404))

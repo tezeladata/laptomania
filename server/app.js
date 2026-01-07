@@ -12,7 +12,7 @@ const authRouter = require("./routers/auth.router");
 
 dotenv.config()
 
-const app = express();
+const app = express()
 
 // middlewares
 app.use(cors({
