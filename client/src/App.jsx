@@ -1,9 +1,21 @@
 import SignUp from "./pages/SignUp";
+import Nav from "./components/UI/Nav.jsx";
+import {Route, Routes} from "react-router";
+import Login from "./pages/Login.jsx";
+import Panel from "./pages/Panel.jsx";
+import Protect from "./components/utils/Protect.jsx";
 
 const App = () => {
   return (
     <>
-      <SignUp />
+      <Nav />
+
+      <Routes>
+          <Route path="/" element={<p>Home</p>} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/panel" element={<Protect><Panel /></Protect>} />
+      </Routes>
     </>
   )
 };

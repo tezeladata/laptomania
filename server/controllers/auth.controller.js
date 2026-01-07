@@ -40,4 +40,9 @@ const logIn = catchAsync(async (req, res, next) => {
     createSendToken(user, 200, res)
 })
 
-module.exports = {signUp, logIn}
+const logOut = catchAsync(async (req, res, next) => {
+    res.clearCookie("lg");
+    res.status(200).send();
+})
+
+module.exports = {signUp, logIn, logOut};
