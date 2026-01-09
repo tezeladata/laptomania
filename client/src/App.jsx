@@ -4,7 +4,7 @@ import {Route, Routes} from "react-router";
 import Login from "./pages/Login.jsx";
 import Panel from "./pages/Panel.jsx";
 import Protect from "./components/utils/Protect.jsx";
-import Products from "./pages/Products.jsx";
+import Catalog from "./pages/Catalog.jsx";
 
 const App = () => {
   return (
@@ -16,7 +16,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/panel" element={<Protect><Panel /></Protect>} />
-          <Route path="/laptops" element={<Products />} />
+          <Route path="/laptops" element={<Catalog />} />
       </Routes>
     </>
   )

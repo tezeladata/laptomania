@@ -24,7 +24,7 @@ export const LaptopProvider = ({children}) => {
         }
     }
 
-    const deleteLaptops = async (id) => {
+    const deleteLaptop = async (id) => {
         try {
             const res = await fetch(`${API_URL}/laptops/${id}`, {
                 method: "DELETE",
@@ -42,29 +42,44 @@ export const LaptopProvider = ({children}) => {
         }
     }
 
-    const updateLaptops = async (id, info) => {
+    const updateLaptop = async (id, formData) => {
         try {
             const res = await fetch(`${API_URL}/laptops/${id}`, {
                 method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify(info),
+                credentials: 'include',
+                body: formData
             });
 
-            if (!res.ok) {
-                const result = await res.json();
+            const result = await res.json();
+
+            if(!res.ok) {
                 throw new Error(result.message);
             }
 
-            const updatedLaptop = await res.json();
+            const index = laptops.findIndex(laptop => laptop._id === result._id);
+            const copyLaptops = [...laptops];
+            copyLaptops[index] = result;
+            setLaptops(copyLaptops);
+        } catch(err) {
+            alert(err.message);
+        }
+    }
 
-            setLaptops((prev) =>
-                prev.map((laptop) =>
-                    laptop._id === id ? updatedLaptop : laptop
-                )
-            );
+    const addLaptop = async (formData) => {
+        try {
+            const res = await fetch(`${API_URL}/laptops`, {
+                method: "POST",
+                body: formData,
+                credentials: "include"
+            })
+
+            const result = await res.json();
+
+            if(!res.ok){
+                throw new Error(result.message);
+            }
+
+            setLaptops([...laptops, result]);
         } catch (e) {
             alert(e.message);
         }
@@ -76,7 +91,7 @@ export const LaptopProvider = ({children}) => {
 
 
     return (
-        <LaptopContext.Provider value={{laptops, deleteLaptops, updateLaptops}}>
+        <LaptopContext.Provider value={{laptops, deleteLaptop, updateLaptop, addLaptop}}>
             {children}
         </LaptopContext.Provider>
     )

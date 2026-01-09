@@ -46,8 +46,6 @@ const deleteLaptop = catchAsync(async (req, res, next) => {
     const promises = laptop.images.map(img => deleteImage(img.public_id));
     const result = await Promise.all(promises)
 
-    console.log(result)
-
     if (!laptop){
         return next(new AppError("Laptop not found", 404))
     };
