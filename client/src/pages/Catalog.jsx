@@ -3,7 +3,7 @@ import { useAuth } from "../context/auth.context.jsx";
 import { useState } from "react";
 
 const Laptop = ({ laptop }) => {
-    const { deleteLaptop, updateLaptop } = useLaptop();
+    const { deleteLaptop, updateLaptop, addToCart } = useLaptop();
     const { user } = useAuth();
     const [editing, setEditing] = useState(false);
 
@@ -109,7 +109,7 @@ const Laptop = ({ laptop }) => {
                                 </button>
                             </div>
                         ) : (
-                            <button className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">
+                            <button onClick={() => addToCart(laptop)} className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600">
                                 Add to Cart
                             </button>
                         )}

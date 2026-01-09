@@ -1,5 +1,6 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router";
+import {toast} from "react-toastify";
 
 const AuthContext = createContext();
 
@@ -30,66 +31,108 @@ export const AuthProvider = ({children}) => {
     }, [])
 
     const signUp = async (formData) => {
-        try {
-            const res = await fetch(`${API_URL}/auth/signUp`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData)
-            });
+    const toastId = toast.loading("Creating account...");
 
-            const result = await res.json();
+    try {
+        const res = await fetch(`${API_URL}/auth/signUp`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData)
+        });
 
-            if(!res.ok) {
-                throw new Error(result.message);
-            };
+        const result = await res.json();
 
-            alert(result.message)
-            navigate("/login")
-        } catch (error) {
-            alert(error);
+        if (!res.ok) {
+            throw new Error(result.message);
         }
+
+        toast.update(toastId, {
+            render: result.message,
+            type: "success",
+            isLoading: false,
+            autoClose: 2000
+        });
+
+        navigate("/login");
+    } catch (e) {
+        toast.update(toastId, {
+            render: `Error: ${e.message}`,
+            type: "error",
+            isLoading: false,
+            autoClose: 3000
+        });
     }
+};
 
     const login = async (formData) => {
-        try {
-            const res = await fetch(`${API_URL}/auth/login`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(formData),
-                credentials: "include"
-            });
+    const toastId = toast.loading("Logging in...");
 
-            const result = await res.json();
+    try {
+        const res = await fetch(`${API_URL}/auth/login`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(formData),
+            credentials: "include"
+        });
 
-            if(!res.ok) {
-                throw new Error(result.message);
-            };
+        const result = await res.json();
 
-            setUser(result);
-            navigate("/panel");
-        } catch (error) {
-            alert(error);
+        if (!res.ok) {
+            throw new Error(result.message);
         }
+
+        setUser(result);
+
+        toast.update(toastId, {
+            render: "Logged in successfully ✅",
+            type: "success",
+            isLoading: false,
+            autoClose: 2000
+        });
+
+        navigate("/panel");
+    } catch (e) {
+        toast.update(toastId, {
+            render: `Error: ${e.message}`,
+            type: "error",
+            isLoading: false,
+            autoClose: 3000
+        });
     }
+};
 
     const logout = async () => {
-        try {
-            const res = await fetch(`${API_URL}/auth/logout`, {
-                method: "POST",
-                credentials: "include"
-            })
+    const toastId = toast.loading("Logging out...");
 
-            if(!res.ok) {
-                throw new Error("User not logged out");
-            }
-        } catch (err) {
-            alert(err.message);
+    try {
+        const res = await fetch(`${API_URL}/auth/logout`, {
+            method: "POST",
+            credentials: "include"
+        });
+
+        if (!res.ok) {
+            throw new Error("User not logged out");
         }
+
+        toast.update(toastId, {
+            render: "Logged out successfully 👋",
+            type: "success",
+            isLoading: false,
+            autoClose: 2000
+        });
+    } catch (e) {
+        toast.update(toastId, {
+            render: `Error: ${e.message}`,
+            type: "error",
+            isLoading: false,
+            autoClose: 3000
+        });
     }
+};
 
     return (
         <AuthContext.Provider value={{user, signUp, login, logout}}>

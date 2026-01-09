@@ -5,20 +5,24 @@ import Login from "./pages/Login.jsx";
 import Panel from "./pages/Panel.jsx";
 import Protect from "./components/utils/Protect.jsx";
 import Catalog from "./pages/Catalog.jsx";
+import {ToastContainer} from "react-toastify";
 
 const App = () => {
-  return (
-    <>
-      <Nav />
 
-      <Routes>
-          <Route path="/" element={<p>Home</p>} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/panel" element={<Protect><Panel /></Protect>} />
-          <Route path="/laptops" element={<Catalog />} />
-      </Routes>
-    </>
+  return (
+      <>
+          <Nav/>
+
+          <Routes>
+              <Route path="/" element={<p>Home</p>}/>
+              <Route path="/login" element={<Login/>}/>
+              <Route path="/signup" element={<SignUp/>}/>
+              <Route path="/panel" element={<Protect><Panel/></Protect>}/>
+              <Route path="/laptops" element={<Catalog/>}/>
+          </Routes>
+
+          <ToastContainer position="bottom-right" />
+      </>
   )
 };
 
