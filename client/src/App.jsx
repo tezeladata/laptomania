@@ -6,6 +6,7 @@ import Panel from "./pages/Panel.jsx";
 import Protect from "./components/utils/Protect.jsx";
 import Catalog from "./pages/Catalog.jsx";
 import {ToastContainer} from "react-toastify";
+import Home from "./pages/Home.jsx";
 
 const App = () => {
 
@@ -14,7 +15,7 @@ const App = () => {
           <Nav/>
 
           <Routes>
-              <Route path="/" element={<p>Home</p>}/>
+              <Route path="/" element={<Home />}/>
               <Route path="/login" element={<Login/>}/>
               <Route path="/signup" element={<SignUp/>}/>
               <Route path="/panel" element={<Protect><Panel/></Protect>}/>
