@@ -1,132 +1,391 @@
-import { Link } from 'react-router';
-import { useAuth } from '../../context/auth.context';
-import { useState } from 'react';
-import { useLaptop } from '../../context/laptops.context';
+import { Link, NavLink } from "react-router";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
+import { useAuth } from "../../context/auth.context";
+import { useLaptop } from "../../context/laptops.context";
+import { Button } from "../ui/button";
+import { ThemeToggle } from "../ui/theme-toggle";
 
-const Nav = () => {
-    const { user, logout } = useAuth();
-    const { cart, addToCart, reduceOne, removeProduct, clearCart } = useLaptop();
-    const [isOpen, setIsOpen] = useState(false);
+const navLinks = [
+  { label: "Home", href: "/" },
+  { label: "Laptops", href: "/laptops" },
+  { label: "Panel", href: "/panel" },
+];
 
-    return (
-        <header className="bg-white shadow sticky top-0 z-50">
-            <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
-                <div className="flex items-center gap-6">
-                    <Link to="/" className="text-xl sm:text-2xl font-extrabold text-indigo-600">
-                    Laptomania
-                    </Link>
+const CartItem = ({ item, reduceOne, addToCart, removeProduct }) => (
+  <div className="flex gap-3 rounded-2xl border border-(--border-subtle) bg-(--bg-card) p-3 shadow-sm">
+    <div className="h-16 w-16 overflow-hidden rounded-xl bg-slate-100 dark:bg-slate-800">
+      <img src={item.images?.[0]?.url} alt={`${item.brand} ${item.model}`} className="h-full w-full object-cover" />
+    </div>
 
-                    <ul className="hidden md:flex items-center gap-2">
-                    <li>
-                        <Link className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50" to="/">
-                        Home
-                        </Link>
-                    </li>
-                    <li>
-                        <Link className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50" to="/laptops">
-                        Laptops
-                        </Link>
-                    </li>
-                    </ul>
-                </div>
+    <div className="flex flex-1 flex-col text-sm">
+      <div className="font-semibold text-slate-900 dark:text-slate-100">
+        {item.brand} {item.model}
+      </div>
 
-                <div>
-                    {user ? (
-                    <ul className="flex items-center gap-3 sm:gap-4">
-                        <li
-                        onClick={() => setIsOpen(true)}
-                        className="relative cursor-pointer px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-                        >
-                        Cart
-                        {cart.length > 0 && (
-                            <span className="absolute -top-1 -right-2 bg-indigo-600 text-white text-xs font-semibold rounded-full px-2">
-                            {cart.reduce((p, c) => p + c.quantity, 0)}
-                            </span>
-                        )}
-                        </li>
+      <p className="text-xs text-slate-500 dark:text-slate-400">${item.price} each</p>
 
-                        <li>
-                        <Link className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50" to="/panel">
-                            Panel
-                        </Link>
-                        </li>
+      <div className="mt-2 flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="h-8 w-8 rounded-full border-slate-200 p-0 dark:border-slate-700"
+          onClick={() => reduceOne(item)}
+        >
+          &minus;
+        </Button>
+        <span className="w-6 text-center font-semibold text-slate-900 dark:text-white">{item.quantity}</span>
+        <Button size="sm" className="h-8 w-8 rounded-full p-0" onClick={() => addToCart(item)}>
+          +
+        </Button>
+      </div>
 
-                        <li>
-                        <button
-                            onClick={logout}
-                            className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-red-600 hover:bg-red-50"
-                        >
-                            Logout
-                        </button>
-                        </li>
-                    </ul>
-                    ) : (
-                    <ul className="flex items-center gap-3">
-                        <li>
-                        <Link className="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-indigo-600" to="/login">
-                            Login
-                        </Link>
-                        </li>
-                        <li>
-                        <Link className="px-4 py-2 rounded-md text-sm font-medium bg-indigo-600 text-white hover:bg-indigo-700" to="/signup">
-                            Sign Up
-                        </Link>
-                        </li>
-                    </ul>
-                    )}
-                </div>
-                </div>
-            </nav>
+      <div className="mt-2 flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
+        <span>Total ${item.price * item.quantity}</span>
+        <button onClick={() => removeProduct(item)} className="text-rose-500 hover:text-rose-600">
+          Remove
+        </button>
+      </div>
+    </div>
+  </div>
+);
 
-            {/* Cart sidebar */}
-            <div
-                className={`fixed inset-y-0 left-0 w-full sm:w-80 bg-white shadow-xl z-50 transform transition-transform duration-300
-                ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
-            >
-                <div className="flex items-center justify-between px-4 py-3 border-b">
-                <h2 className="text-lg font-semibold">Your Cart</h2>
-                <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-800">
-                    ✕
-                </button>
-                </div>
+const CartPortal = ({ children }) => {
+  const [container, setContainer] = useState(null);
+  useEffect(() => {
+    let el = document.getElementById("cart-root");
+    if (!el) {
+      el = document.createElement("div");
+      el.id = "cart-root";
+      document.body.appendChild(el);
+    }
+    setContainer(el);
+  }, []);
 
-                <div className="p-4 space-y-4 overflow-y-auto h-[calc(100%-64px)]">
-                {cart.length === 0 ? (
-                    <p className="text-center text-sm text-gray-500 mt-10">Your cart is empty.</p>
-                ) : (
-                    cart.map(item => (
-                    <div key={item._id} className="flex gap-3 pb-3 border-b">
-                        <img src={item.images?.[0]?.url} className="w-16 h-16 rounded object-cover" />
-                        <div className="flex-1 space-y-1">
-                        <h3 className="text-sm font-medium">
-                            {item.brand} {item.model}
-                        </h3>
+  if (!container) return null;
+  return createPortal(children, container);
+};
 
-                        <div className="flex items-center gap-2 text-sm">
-                            <button onClick={() => reduceOne(item)} className="px-2 border rounded hover:bg-gray-100">−</button>
-                            <span>{item.quantity}</span>
-                            <button onClick={() => addToCart(item)} className="px-2 border rounded hover:bg-gray-100">+</button>
-                        </div>
+const CartPanel = ({ cart, isOpen, onClose, reduceOne, addToCart, removeProduct, clearCart }) => {
+  const hasItems = cart.length > 0;
+  const totalItems = cart.reduce((p, c) => p + c.quantity, 0);
+  const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-                        <p className="text-xs text-gray-600">Price ${item.price}</p>
-                        <p className="text-xs text-gray-600">Total ${item.price * item.quantity}</p>
+  return (
+    <CartPortal>
+      <div className={`fixed inset-0 z-40 transition ${isOpen ? "pointer-events-auto" : "pointer-events-none"}`}>
+        <div
+          className={`absolute inset-0 bg-slate-900/50 backdrop-blur-lg transition-opacity ${
+            isOpen ? "opacity-100" : "opacity-0"
+          }`}
+          onClick={onClose}
+        />
 
-                        <button onClick={() => removeProduct(item)} className="text-xs text-red-500 hover:underline">
-                            Remove
-                        </button>
-                        </div>
-                    </div>
-                    ))
-                )}
-                </div>
+        <div className="absolute inset-y-0 right-0 flex w-full justify-end sm:w-auto sm:max-w-xl">
+          <div
+            className={`flex h-full w-full max-w-xl flex-col border-l border-white/10 bg-(--bg-card) p-6 text-slate-900 shadow-2xl transition-all duration-300 dark:bg-slate-900 dark:text-white ${
+              isOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-wide text-slate-400">Your Cart</p>
+                <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
+                  {hasItems ? `${totalItems} item${totalItems > 1 ? "s" : ""}` : "It's empty"}
+                </h2>
+              </div>
+
+              <Button variant="ghost" onClick={onClose} className="rounded-full text-slate-500 hover:text-slate-900 dark:text-slate-300">
+                ✕
+              </Button>
             </div>
 
-            {isOpen && (
-                <div onClick={() => setIsOpen(false)} className="fixed inset-0 bg-black/30 z-40" />
+            <div className="mt-6 space-y-4 overflow-y-auto pr-2" style={{ maxHeight: "65vh" }}>
+              {hasItems ? (
+                cart.map(item => (
+                  <CartItem
+                    key={item._id}
+                    item={item}
+                    reduceOne={reduceOne}
+                    addToCart={addToCart}
+                    removeProduct={removeProduct}
+                  />
+                ))
+              ) : (
+                <div className="rounded-2xl border border-dashed border-(--border-subtle) bg-(--bg-card) p-8 text-center text-sm text-slate-500 dark:text-slate-400">
+                  Discover a laptop you love and add it to your cart.
+                </div>
+              )}
+            </div>
+
+            {hasItems && (
+              <div className="mt-6 space-y-4 rounded-2xl border border-(--border-subtle) bg-(--bg-card) p-5">
+                <div className="flex items-center justify-between text-sm">
+                  <span>Estimated total</span>
+                  <span className="text-lg font-semibold">${totalAmount.toFixed(2)}</span>
+                </div>
+                <p className="text-xs text-slate-500 dark:text-slate-300">
+                  Taxes and shipping calculated at checkout.
+                </p>
+                <div className="flex flex-col gap-3 sm:flex-row">
+                  <Button className="flex-1 rounded-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-white/90">
+                    Checkout (coming soon)
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="flex-1 rounded-full border-rose-300 text-rose-400 hover:bg-rose-500/10"
+                    onClick={clearCart}
+                  >
+                    Clear cart
+                  </Button>
+                </div>
+              </div>
             )}
-        </header>
+          </div>
+        </div>
+      </div>
+    </CartPortal>
+  );
+};
+
+const Nav = () => {
+  const { user, logout } = useAuth();
+  const { cart, addToCart, reduceOne, removeProduct, clearCart } = useLaptop();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const itemsInCart = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+  useEffect(() => {
+    const shouldLockScroll = isOpen || isMobileMenuOpen;
+    document.body.style.overflow = shouldLockScroll ? "hidden" : "auto";
+
+    if (isOpen) {
+      document.documentElement.style.setProperty("--page-blur", "blur(12px)");
+    } else {
+      document.documentElement.style.setProperty("--page-blur", "none");
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+      document.documentElement.style.removeProperty("--page-blur");
+    };
+  }, [isOpen, isMobileMenuOpen]);
+
+  const handleLogout = () => {
+    logout();
+    setIsMobileMenuOpen(false);
+    setTimeout(() => {
+      window.location.reload();
+    }, 150);
+  };
+
+  const onNavigate = () => setIsMobileMenuOpen(false);
+
+  const renderDesktopActions = () => {
+    if (user) {
+      return (
+        <>
+          <Link to="/panel">
+            <Button variant="ghost" className="hover-static rounded-full border border-white/30 px-5 text-white">
+              Panel
+            </Button>
+          </Link>
+
+          <Button onClick={handleLogout} className="rounded-full bg-white px-6 text-slate-900 hover:bg-white/90">
+            Logout
+          </Button>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <Link to="/login">
+          <Button variant="ghost" className="rounded-full px-5 text-white hover:bg-white/20">
+            Login
+          </Button>
+        </Link>
+
+        <Link to="/signup">
+          <Button className="rounded-full bg-white px-6 text-slate-900 hover:bg-white/90">
+            Sign Up
+          </Button>
+        </Link>
+      </>
     );
+  };
+
+  const renderMobileActions = () => {
+    if (user) {
+      return (
+        <div className="flex flex-col gap-3">
+          {user.role === "user" && (
+            <Button
+              variant="outline"
+              className="w-full rounded-full border-white/40 text-white"
+              onClick={() => {
+                setIsOpen(true);
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              View cart
+            </Button>
+          )}
+
+          <Link to="/panel" onClick={onNavigate}>
+            <Button variant="ghost" className="w-full rounded-full border border-white/10 text-white">
+              Panel
+            </Button>
+          </Link>
+
+          <Button onClick={handleLogout} className="w-full rounded-full bg-white px-6 text-slate-900 hover:bg-white/90">
+            Logout
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex flex-col gap-3">
+        <Link to="/login" onClick={onNavigate}>
+          <Button variant="ghost" className="w-full rounded-full border border-white/20 text-white hover:bg-white/10">
+            Login
+          </Button>
+        </Link>
+
+        <Link to="/signup" onClick={onNavigate}>
+          <Button className="w-full rounded-full bg-white px-6 text-slate-900 hover:bg-white/90">
+            Sign Up
+          </Button>
+        </Link>
+      </div>
+    );
+  };
+
+  return (
+    <header className="sticky top-0 z-40 w-full border-b border-white/10 bg-linear-to-r from-slate-900/95 via-indigo-900/90 to-slate-800/80 text-white backdrop-blur">
+      <nav className="mx-auto flex h-16 w-full max-w-6xl items-center px-4 sm:px-6">
+        <div className="flex w-full items-center justify-between gap-4">
+          <div className="flex flex-1 items-center gap-4 sm:gap-6">
+            <Link to="/" className="text-2xl font-black tracking-tight text-white" onClick={onNavigate}>
+              Laptomania
+            </Link>
+
+            <ul className="hidden items-center gap-1 rounded-full bg-white/10 p-1 text-sm font-medium text-white/70 md:flex">
+              {navLinks.map(link => (
+                <li key={link.href}>
+                  <NavLink
+                    to={link.href}
+                    onClick={onNavigate}
+                    className={({ isActive }) =>
+                      `rounded-full px-4 py-2 transition ${
+                        isActive ? "bg-white text-slate-900" : "hover:bg-white/20 hover:text-white"
+                      }`
+                    }
+                  >
+                    {link.label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            {user?.role === "user" && (
+              <>
+                <Button
+                  variant="ghost"
+                  className="relative hidden rounded-full border border-white/30 px-5 text-white md:inline-flex"
+                  onClick={() => setIsOpen(true)}
+                >
+                  <span className="mr-2">Cart</span>
+                  {itemsInCart > 0 && (
+                    <span className="absolute -right-2 -top-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-xs font-bold">
+                      {itemsInCart}
+                    </span>
+                  )}
+                </Button>
+
+                <button
+                  type="button"
+                  className="relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/30 text-white md:hidden"
+                  onClick={() => setIsOpen(true)}
+                >
+                  <span className="sr-only">Open cart</span>
+                  {itemsInCart > 0 && (
+                    <span className="absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[11px] font-bold">
+                      {itemsInCart}
+                    </span>
+                  )}
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14h9.75m0 0H19.5a2.25 2.25 0 0 0 2.138-1.59l1.263-4.42A1.125 1.125 0 0 0 21.813 6H5.106m2.394 8L5.106 6m2.394 8-.958 3.351A1.125 1.125 0 0 0 7.64 18h11.61m0 0a1.875 1.875 0 1 1-3.75 0m3.75 0a1.875 1.875 0 1 1-3.75 0m-7.5 0a1.875 1.875 0 1 1-3.75 0m3.75 0a1.875 1.875 0 1 1-3.75 0" />
+                  </svg>
+                </button>
+              </>
+            )}
+
+            <ThemeToggle />
+
+            <div className="hidden items-center gap-2 md:flex">{renderDesktopActions()}</div>
+
+            <button
+              type="button"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/40 text-white md:hidden"
+              aria-expanded={isMobileMenuOpen}
+              aria-label="Toggle navigation menu"
+              onClick={() => setIsMobileMenuOpen(prev => !prev)}
+            >
+              {isMobileMenuOpen ? (
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-6 w-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6h16.5M3.75 12h16.5m-16.5 6h16.5" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {isMobileMenuOpen && (
+        <div className="md:hidden border-t border-white/10 bg-[rgba(15,23,42,0.95)] backdrop-blur">
+          <div className="mx-auto max-w-6xl px-4 pb-6 pt-4 sm:px-6">
+            <nav className="flex flex-col gap-2 text-sm font-medium text-white">
+              {navLinks.map(link => (
+                <NavLink
+                  key={link.href}
+                  to={link.href}
+                  onClick={onNavigate}
+                  className={({ isActive }) =>
+                    `rounded-2xl px-4 py-3 transition ${isActive ? "bg-white text-slate-900" : "bg-white/5"}`
+                  }
+                >
+                  {link.label}
+                </NavLink>
+              ))}
+            </nav>
+
+            <div className="mt-6 border-t border-white/10 pt-6">{renderMobileActions()}</div>
+          </div>
+        </div>
+      )}
+
+      {user?.role === "user" && (
+        <CartPanel
+          cart={cart}
+          isOpen={isOpen}
+          onClose={() => setIsOpen(false)}
+          reduceOne={reduceOne}
+          addToCart={addToCart}
+          removeProduct={removeProduct}
+          clearCart={clearCart}
+        />
+      )}
+    </header>
+  );
 };
 
 export default Nav;
