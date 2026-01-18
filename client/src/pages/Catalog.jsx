@@ -1,12 +1,165 @@
 import { useLaptop } from "../context/laptops.context";
 import { useAuth } from "../context/auth.context";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
 import { Button } from "../components/ui/button";
 import { Input, Label, Textarea } from "../components/ui/input";
 import { Badge } from "../components/ui/badge";
 import { Reveal } from "../components/ui/reveal";
+import { useDebouncedValue } from "../hooks/useDebouncedValue";
+import { cn } from "../lib/utils";
+
+const sortOptions = [
+  { label: "Featured", value: "featured" },
+  { label: "Price: Low to High", value: "price-asc" },
+  { label: "Price: High to Low", value: "price-desc" },
+  { label: "Popularity", value: "popularity" },
+  { label: "Release date", value: "release-date" },
+];
+
+const MagneticButton = ({ className = "", wrapperClassName = "", children, ...props }) => {
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const strength = 12;
+
+  const handleMove = event => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const relX = (event.clientX - rect.left - rect.width / 2) / rect.width;
+    const relY = (event.clientY - rect.top - rect.height / 2) / rect.height;
+    setOffset({ x: relX * strength, y: relY * strength });
+  };
+
+  const reset = () => setOffset({ x: 0, y: 0 });
+
+  return (
+    <span
+      className={cn("inline-flex transition-transform duration-200", wrapperClassName)}
+      style={{ transform: `translate(${offset.x}px, ${offset.y}px)` }}
+      onMouseMove={handleMove}
+      onMouseLeave={reset}
+    >
+      <Button className={className} {...props}>
+        {children}
+      </Button>
+    </span>
+  );
+};
+
+const CatalogFilters = ({
+  brandQuery,
+  setBrandQuery,
+  minPrice,
+  setMinPrice,
+  maxPrice,
+  setMaxPrice,
+  ramFilter,
+  setRamFilter,
+  gpuFilter,
+  setGpuFilter,
+  sortBy,
+  setSortBy,
+  brandOptions,
+  ramOptions,
+  gpuOptions,
+  onReset,
+}) => (
+  <div className="mb-10 space-y-4 rounded-[32px] border border-white/10 bg-white/5 p-6 backdrop-blur sm:rounded-[40px]">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <label className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">
+        Brand / model
+        <Input
+          className="mt-2"
+          placeholder="Search brand or model"
+          value={brandQuery}
+          onChange={event => setBrandQuery(event.target.value)}
+          list="brand-options"
+        />
+        <datalist id="brand-options">
+          {brandOptions.map(option => (
+            <option key={option} value={option} />
+          ))}
+        </datalist>
+      </label>
+
+      <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">Price range</p>
+        <div className="mt-3 grid grid-cols-2 gap-3">
+          <Input
+            type="number"
+            min={0}
+            placeholder="Min"
+            value={minPrice}
+            onChange={event => setMinPrice(event.target.value)}
+          />
+          <Input
+            type="number"
+            min={0}
+            placeholder="Max"
+            value={maxPrice}
+            onChange={event => setMaxPrice(event.target.value)}
+          />
+        </div>
+      </div>
+
+      <label className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">
+        RAM
+        <select
+          className="mt-2 h-11 w-full rounded-2xl border border-white/15 bg-transparent px-4 text-sm text-white"
+          value={ramFilter}
+          onChange={event => setRamFilter(event.target.value)}
+        >
+          <option value="">Any</option>
+          {ramOptions.map(option => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <label className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">
+        GPU
+        <select
+          className="mt-2 h-11 w-full rounded-2xl border border-white/15 bg-transparent px-4 text-sm text-white"
+          value={gpuFilter}
+          onChange={event => setGpuFilter(event.target.value)}
+        >
+          <option value="">Any</option>
+          {gpuOptions.map(option => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
+
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <label className="flex w-full flex-col text-xs font-semibold uppercase tracking-[0.4em] text-slate-400 sm:w-auto">
+        Sort by
+        <select
+          className="mt-2 h-11 rounded-2xl border border-white/15 bg-transparent px-4 text-sm text-white"
+          value={sortBy}
+          onChange={event => setSortBy(event.target.value)}
+        >
+          {sortOptions.map(option => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <button
+        type="button"
+        className="self-start text-sm font-semibold text-indigo-200 underline-offset-4 hover:underline"
+        onClick={onReset}
+      >
+        Reset filters
+      </button>
+    </div>
+  </div>
+);
 
 const LaptopDetails = ({ laptop, onClose }) => {
   if (!laptop || typeof document === "undefined") return null;
@@ -83,6 +236,7 @@ const Laptop = ({ laptop, onOpenDetails }) => {
   const { deleteLaptop, updateLaptop, addToCart } = useLaptop();
   const { user } = useAuth();
   const [editing, setEditing] = useState(false);
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
 
   const editableFields = Object.keys(laptop).filter(
     key => !["_id", "__v", "createdAt", "updatedAt", "isAvailable", "images"].includes(key)
@@ -95,9 +249,21 @@ const Laptop = ({ laptop, onOpenDetails }) => {
     setEditing(false);
   };
 
+  const handleTilt = event => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const relX = (event.clientX - rect.left - rect.width / 2) / rect.width;
+    const relY = (event.clientY - rect.top - rect.height / 2) / rect.height;
+    setTilt({ x: relY * -8, y: relX * 8 });
+  };
+
   return (
     <Reveal>
-      <Card className="flex h-full flex-col rounded-[28px] border border-(--border-subtle) bg-(--bg-card)/95 shadow-(--shadow-soft) dark:bg-slate-900/60 sm:rounded-[36px]">
+      <Card
+        className="interactive-card flex h-full flex-col rounded-[28px] border border-(--border-subtle) bg-(--bg-card)/95 shadow-(--shadow-soft) dark:bg-slate-900/60 sm:rounded-[36px]"
+        style={{ "--tilt-x": `${tilt.x}deg`, "--tilt-y": `${tilt.y}deg` }}
+        onMouseMove={handleTilt}
+        onMouseLeave={() => setTilt({ x: 0, y: 0 })}
+      >
         <CardHeader className="flex flex-col gap-4">
           <button
             type="button"
@@ -169,9 +335,9 @@ const Laptop = ({ laptop, onOpenDetails }) => {
           </div>
 
           <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
-            <Button variant="outline" onClick={() => onOpenDetails(laptop)}>
+            <MagneticButton variant="outline" onClick={() => onOpenDetails(laptop)}>
               View details
-            </Button>
+            </MagneticButton>
             {user?.role === "admin" ? (
               <>
                 <Button className="bg-rose-500 hover:bg-rose-600" onClick={() => deleteLaptop(laptop._id)}>
@@ -182,9 +348,9 @@ const Laptop = ({ laptop, onOpenDetails }) => {
                 </Button>
               </>
             ) : (
-              <Button className="w-full min-w-[150px] sm:w-auto" onClick={() => addToCart(laptop)}>
+              <MagneticButton className="w-full min-w-[150px] sm:w-auto" onClick={() => addToCart(laptop)}>
                 Add to Cart
-              </Button>
+              </MagneticButton>
             )}
           </div>
         </div>
@@ -193,9 +359,7 @@ const Laptop = ({ laptop, onOpenDetails }) => {
   );
 };
 
-const LaptopList = ({ onOpenDetails }) => {
-  const { laptops } = useLaptop();
-
+const LaptopList = ({ laptops, onOpenDetails }) => {
   if (!laptops?.length) {
     return (
       <Reveal>
@@ -217,7 +381,77 @@ const LaptopList = ({ onOpenDetails }) => {
 
 const Catalog = () => {
   const { user } = useAuth();
+  const { laptops } = useLaptop();
   const [activeLaptop, setActiveLaptop] = useState(null);
+  const [brandQuery, setBrandQuery] = useState("");
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [ramFilter, setRamFilter] = useState("");
+  const [gpuFilter, setGpuFilter] = useState("");
+  const [sortBy, setSortBy] = useState("featured");
+
+  const debouncedBrand = useDebouncedValue(brandQuery, 250);
+  const debouncedMin = useDebouncedValue(minPrice, 250);
+  const debouncedMax = useDebouncedValue(maxPrice, 250);
+
+  const { brandOptions, ramOptions, gpuOptions } = useMemo(() => {
+    const unique = values => Array.from(new Set(values.filter(Boolean))).sort();
+    return {
+      brandOptions: unique(laptops.map(laptop => laptop.brand)),
+      ramOptions: unique(laptops.map(laptop => laptop.ram)),
+      gpuOptions: unique(laptops.map(laptop => laptop.graphics)),
+    };
+  }, [laptops]);
+
+  const filteredLaptops = useMemo(() => {
+    const normalizedBrand = debouncedBrand.trim().toLowerCase();
+    const minValue = Number(debouncedMin) || 0;
+    const maxValue = debouncedMax ? Number(debouncedMax) : Infinity;
+
+    const filtered = laptops.filter(laptop => {
+      const brandMatch =
+        !normalizedBrand || `${laptop.brand} ${laptop.model}`.toLowerCase().includes(normalizedBrand);
+
+      const price = Number(laptop.price) || 0;
+      const minMatch = !debouncedMin || price >= minValue;
+      const maxMatch = !debouncedMax || price <= maxValue;
+      const ramMatch = !ramFilter || laptop.ram?.toLowerCase().includes(ramFilter.toLowerCase());
+      const gpuMatch = !gpuFilter || laptop.graphics?.toLowerCase().includes(gpuFilter.toLowerCase());
+
+      return brandMatch && minMatch && maxMatch && ramMatch && gpuMatch;
+    });
+
+    return filtered.sort((a, b) => {
+      const priceA = Number(a.price) || 0;
+      const priceB = Number(b.price) || 0;
+      const popularityA = Number(a.popularity ?? a.stock ?? 0);
+      const popularityB = Number(b.popularity ?? b.stock ?? 0);
+      const dateA = new Date(a.releaseDate || a.createdAt || 0).getTime();
+      const dateB = new Date(b.releaseDate || b.createdAt || 0).getTime();
+
+      switch (sortBy) {
+        case "price-asc":
+          return priceA - priceB;
+        case "price-desc":
+          return priceB - priceA;
+        case "popularity":
+          return popularityB - popularityA;
+        case "release-date":
+          return dateB - dateA;
+        default:
+          return 0;
+      }
+    });
+  }, [laptops, debouncedBrand, debouncedMin, debouncedMax, ramFilter, gpuFilter, sortBy]);
+
+  const resetFilters = () => {
+    setBrandQuery("");
+    setMinPrice("");
+    setMaxPrice("");
+    setRamFilter("");
+    setGpuFilter("");
+    setSortBy("featured");
+  };
 
   return (
     <main className="relative min-h-screen overflow-hidden">
@@ -243,7 +477,26 @@ const Catalog = () => {
           </div>
         </Reveal>
 
-        <LaptopList onOpenDetails={setActiveLaptop} />
+        <CatalogFilters
+          brandQuery={brandQuery}
+          setBrandQuery={setBrandQuery}
+          minPrice={minPrice}
+          setMinPrice={setMinPrice}
+          maxPrice={maxPrice}
+          setMaxPrice={setMaxPrice}
+          ramFilter={ramFilter}
+          setRamFilter={setRamFilter}
+          gpuFilter={gpuFilter}
+          setGpuFilter={setGpuFilter}
+          sortBy={sortBy}
+          setSortBy={setSortBy}
+          brandOptions={brandOptions}
+          ramOptions={ramOptions}
+          gpuOptions={gpuOptions}
+          onReset={resetFilters}
+        />
+
+        <LaptopList laptops={filteredLaptops} onOpenDetails={setActiveLaptop} />
       </div>
 
       {activeLaptop && <LaptopDetails laptop={activeLaptop} onClose={() => setActiveLaptop(null)} />}

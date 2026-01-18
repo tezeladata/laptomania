@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema({
     fullname: {
@@ -29,20 +30,28 @@ const userSchema = new mongoose.Schema({
     },
     isVerified: {
         type: Boolean,
-        default: true
+        default: false
     },
     isActive: {
         type: Boolean,
         default: true
-    }
+    },
+    verificationCode: String,
 }, {timestamps: true});
 
-userSchema.pre("save", async function(){
-    this.password = await bcrypt.hash(this.password, 10)
-})
+userSchema.pre("save", async function () {
+    if (!this.isModified("password")) return;
+    this.password = await bcrypt.hash(this.password, 10);
+});
 
 userSchema.methods.comparePassword = async function(candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password)
+}
+
+userSchema.methods.createEmailVerificationToken = function() {
+    const code = crypto.randomBytes(12).toString("hex");
+    this.verificationCode = code;
+    return code;
 }
 
 userSchema.methods.signToken = function() {

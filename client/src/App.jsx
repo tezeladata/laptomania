@@ -7,6 +7,7 @@ import Panel from "./pages/Panel.jsx";
 import Protect from "./components/utils/Protect.jsx";
 import Catalog from "./pages/Catalog.jsx";
 import Home from "./pages/Home.jsx";
+import Footer from "./components/UI/Footer.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -51,6 +52,8 @@ const App = () => {
         />
         <Route path="/laptops" element={<Catalog />} />
       </Routes>
+
+      <Footer />
 
       <ToastContainer position="bottom-right" />
     </>
