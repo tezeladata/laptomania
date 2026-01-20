@@ -4,7 +4,11 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const globalErrorHandler = require("./controllers/error.controller");
 const cookieParser = require("cookie-parser");
-// const path = require("path");
+
+// Cybersecurity
+const rateLimiter = require("express-rate-limit");
+const mongoSanitize = require("express-mongo-sanitize");
+const helmet = require("helmet");
 
 // routers
 const laptopRouter = require("./routers/laptop.router");
@@ -13,6 +17,18 @@ const authRouter = require("./routers/auth.router");
 dotenv.config()
 
 const app = express()
+
+// Cybersecurity
+app.use(rateLimiter({
+    windowMs: 1000,
+    max: 100
+}))
+app.use(mongoSanitize);
+app.use(helmet);
+
+app.get("/api/status", (req, res) => {
+    res.json({status: "Server is running"})
+})
 
 // middlewares
 app.use(cors({
