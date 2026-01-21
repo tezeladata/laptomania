@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Button } from "../components/UI/Button";
+import { Button } from "../components/UI/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/UI/Card";
 import { StatCard } from "../components/UI/StatCard";
 import { Reveal } from "../components/UI/Reveal";

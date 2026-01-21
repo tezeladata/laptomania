@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../co
 import { Badge } from "../components/UI/Badge";
 import { StatCard } from "../components/UI/StatCard";
 import { Input, Label, Textarea } from "../components/UI/Input";
-import { Button } from "../components/UI/Button";
+import { Button } from "../components/UI/button";
 import { Reveal } from "../components/UI/Reveal";
 import { useMemo } from "react";
 

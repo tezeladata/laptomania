@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Button } from "../UI/Button";
+import { Button } from "./button";
 
 const footerLinks = [
   {
