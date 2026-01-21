@@ -1,6 +1,6 @@
 import { useAuth } from "../context/auth.context";
 import { useForm } from "../hooks/useForm";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/Card";
 import { Input, Label } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { Link } from "react-router";

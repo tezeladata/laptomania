@@ -1,7 +1,7 @@
 import { useAuth } from "../context/auth.context";
 import Catalog from "./Catalog";
 import { useLaptop } from "../context/laptops.context";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/Card";
 import { Badge } from "../components/ui/badge";
 import { StatCard } from "../components/ui/stat-card";
 import { Input, Label, Textarea } from "../components/ui/input";
