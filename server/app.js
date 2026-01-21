@@ -23,8 +23,8 @@ app.use(rateLimiter({
     windowMs: 1000,
     max: 100
 }))
-app.use(mongoSanitize);
-app.use(helmet);
+// app.use(mongoSanitize);
+// app.use(helmet);
 
 app.get("/api/status", (req, res) => {
     res.json({status: "Server is running"})
