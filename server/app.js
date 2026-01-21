@@ -7,7 +7,6 @@ const cookieParser = require("cookie-parser");
 
 // Cybersecurity
 const rateLimiter = require("express-rate-limit");
-const mongoSanitize = require("express-mongo-sanitize");
 const helmet = require("helmet");
 
 // routers
@@ -19,11 +18,14 @@ dotenv.config()
 const app = express()
 
 // Cybersecurity
+app.use(cors({
+    origin: process.env.CLIENT_URL,
+    credentials: true
+}));
 app.use(rateLimiter({
     windowMs: 1000,
     max: 100
 }))
-// app.use(mongoSanitize);
 // app.use(helmet);
 
 app.get("/api/status", (req, res) => {
@@ -31,10 +33,6 @@ app.get("/api/status", (req, res) => {
 })
 
 // middlewares
-app.use(cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true
-}));
 app.use(express.json());
 app.use(cookieParser());
 
