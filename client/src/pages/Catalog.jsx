@@ -2,7 +2,7 @@ import { useLaptop } from "../context/laptops.context";
 import { useAuth } from "../context/auth.context";
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/UI/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/UI/Card";
 import { Button } from "../components/UI/Button";
 import { Input, Label, Textarea } from "../components/UI/Input";
 import { Badge } from "../components/UI/Badge";
