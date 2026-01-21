@@ -2,11 +2,11 @@ import { useLaptop } from "../context/laptops.context";
 import { useAuth } from "../context/auth.context";
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/UI/Card";
-import { Button } from "../components/UI/Button";
-import { Input, Label, Textarea } from "../components/UI/Input";
-import { Badge } from "../components/UI/Badge";
-import { Reveal } from "../components/UI/Reveal";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/UI/Card1";
+import { Button } from "../components/UI/Button1";
+import { Input, Label, Textarea } from "../components/UI/Input1";
+import { Badge } from "../components/UI/Badge1";
+import { Reveal } from "../components/UI/Reveal1";
 import { useDebouncedValue } from "../hooks/useDebouncedValue";
 import { cn } from "../lib/utils";
 

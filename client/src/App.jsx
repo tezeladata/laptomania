@@ -7,7 +7,7 @@ import Panel from "./pages/Panel.jsx";
 import Protect from "./components/utils/Protect.jsx";
 import Catalog from "./pages/Catalog.jsx";
 import Home from "./pages/Home.jsx";
-import Footer from "./components/UI/Footer.jsx";
+import Footer from "./components/UI/Footer1.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

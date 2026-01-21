@@ -1,9 +1,9 @@
 import { Link } from "react-router";
-import { Button } from "../components/UI/Button";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/UI/Card";
-import { StatCard } from "../components/UI/StatCard";
-import { Reveal } from "../components/UI/Reveal";
-import { HeroOrbit } from "../components/UI/HeroOrbit";
+import { Button } from "../components/UI/Button1";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/UI/Card1";
+import { StatCard } from "../components/UI/StatCard1";
+import { Reveal } from "../components/UI/Reveal1";
+import { HeroOrbit } from "../components/UI/HeroOrbit1";
 
 const stats = [
   { title: "Listings", value: "120+", description: "Curated and verified devices" },
