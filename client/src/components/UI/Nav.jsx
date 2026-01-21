@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useAuth } from "../../context/auth.context";
 import { useLaptop } from "../../context/laptops.context";
-import { Button } from "./button";
+import { Button } from "./Button";
 import { ThemeToggle } from "../UI/ThemeToggle";
 
 const navLinks = [
