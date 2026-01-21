@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useAuth } from "../../context/auth.context";
 import { useLaptop } from "../../context/laptops.context";
-import { Button } from "../ui/button";
-import { ThemeToggle } from "../ui/theme-toggle";
+import { Button } from "../UI/Button";
+import { ThemeToggle } from "../UI/ThemeToggle";
 
 const navLinks = [
   { label: "Home", href: "/" },

@@ -1,12 +1,12 @@
 import { useAuth } from "../context/auth.context";
 import Catalog from "./Catalog";
 import { useLaptop } from "../context/laptops.context";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/ui/Card";
-import { Badge } from "../components/ui/badge";
-import { StatCard } from "../components/ui/stat-card";
-import { Input, Label, Textarea } from "../components/ui/input";
-import { Button } from "../components/ui/button";
-import { Reveal } from "../components/ui/reveal";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/UI/Card";
+import { Badge } from "../components/UI/Badge";
+import { StatCard } from "../components/UI/StatCard";
+import { Input, Label, Textarea } from "../components/UI/Input";
+import { Button } from "../components/UI/Button";
+import { Reveal } from "../components/UI/Reveal";
 import { useMemo } from "react";
 
 const AddLaptop = () => {

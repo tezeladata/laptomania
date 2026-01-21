@@ -3,10 +3,10 @@ import { useAuth } from "../context/auth.context";
 import { useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "../components/UI/Card";
-import { Button } from "../components/ui/button";
-import { Input, Label, Textarea } from "../components/ui/input";
-import { Badge } from "../components/ui/badge";
-import { Reveal } from "../components/ui/reveal";
+import { Button } from "../components/UI/Button";
+import { Input, Label, Textarea } from "../components/UI/Input";
+import { Badge } from "../components/UI/Badge";
+import { Reveal } from "../components/UI/Reveal";
 import { useDebouncedValue } from "../hooks/useDebouncedValue";
 import { cn } from "../lib/utils";
 

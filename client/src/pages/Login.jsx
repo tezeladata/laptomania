@@ -1,10 +1,10 @@
 import { useAuth } from "../context/auth.context";
 import { useForm } from "../hooks/useForm";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/UI/Card";
-import { Input, Label } from "../components/ui/input";
-import { Button } from "../components/ui/button";
+import { Input, Label } from "../components/UI/Input";
+import { Button } from "../components/UI/Button";
 import { Link } from "react-router";
-import { Reveal } from "../components/ui/reveal";
+import { Reveal } from "../components/UI/Reveal";
 
 const Login = () => {
   const { login } = useAuth();

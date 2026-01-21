@@ -1,5 +1,5 @@
 import { useTheme } from "../../context/theme.context.jsx";
-import { cn } from "../../lib/utils";
+import { cn } from "../../lib/utils.js";
 
 export const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
