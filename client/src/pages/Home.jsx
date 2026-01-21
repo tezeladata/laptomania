@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { Button } from "../components/UI/Button";
-import { Card, CardContent, CardHeader, CardTitle } from "../components/UI/Card";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/UI/card";
 import { StatCard } from "../components/UI/StatCard";
 import { Reveal } from "../components/UI/Reveal";
 import { HeroOrbit } from "../components/UI/HeroOrbit";
