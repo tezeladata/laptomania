@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation } from "react-router";
 import { useEffect, useState } from "react";
 import SignUp from "./pages/SignUp";
-import Nav from "./components/UI/Nav.jsx";
+import Nav from "./components/UI/Nav1.jsx";
 import Login from "./pages/Login.jsx";
 import Panel from "./pages/Panel.jsx";
 import Protect from "./components/utils/Protect.jsx";
