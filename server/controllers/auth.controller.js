@@ -9,7 +9,8 @@ const createSendToken = (user, statusCode, res) => {
     const cookieOptions = {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "None",
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        path: "/",
         maxAge: process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     };
 
@@ -253,7 +254,8 @@ const logOut = catchAsync(async (req, res, next) => {
     res.clearCookie("lg", {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
-        sameSite: "None"
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        path: "/"
     });
 
     res.status(200).send();
