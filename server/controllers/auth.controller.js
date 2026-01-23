@@ -250,8 +250,13 @@ const logIn = catchAsync(async (req, res, next) => {
 })
 
 const logOut = catchAsync(async (req, res, next) => {
-    res.clearCookie("lg");
+    res.clearCookie("lg", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "None"
+    });
+
     res.status(200).send();
-})
+});
 
 module.exports = {signUp, logIn, logOut, verify};
