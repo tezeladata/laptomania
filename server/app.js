@@ -12,6 +12,7 @@ const helmet = require("helmet");
 // routers
 const laptopRouter = require("./routers/laptop.router");
 const authRouter = require("./routers/auth.router");
+const oauthRouter = require("./routers/oauth.router");
 
 dotenv.config()
 
@@ -41,6 +42,7 @@ app.use(cookieParser());
 // using routers
 app.use("/api/laptops", laptopRouter);
 app.use("/api/auth", authRouter)
+app.use("/api/oauth", oauthRouter);
 
 // global error handler
 app.use(globalErrorHandler)

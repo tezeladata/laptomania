@@ -17,17 +17,24 @@ const PageTransitionLoader = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    const timeout = setTimeout(() => setIsLoading(false), 450);
+    const timeout = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timeout);
   }, [location]);
 
   if (!isLoading) return null;
 
+  const digits = ["0", "1", "0", "1", "1", "0", "1", "0"]; 
+
   return (
     <div className="page-loader">
-      <div className="page-loader__dot" />
-      <div className="page-loader__dot" />
-      <div className="page-loader__dot" />
+      <div className="ai-matrix-loader">
+        {digits.map((digit, index) => (
+          <div key={index} className="digit">
+            {digit}
+          </div>
+        ))}
+        <div className="glow" />
+      </div>
     </div>
   );
 };
