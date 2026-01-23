@@ -118,6 +118,8 @@ export const AuthProvider = ({children}) => {
             throw new Error("User not logged out");
         }
 
+        setUser(null);
+
         toast.update(toastId, {
             render: "Logged out successfully 👋",
             type: "success",
