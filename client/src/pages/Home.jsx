@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../components/UI/Card1
 import { StatCard } from "../components/UI/StatCard1";
 import { Reveal } from "../components/UI/Reveal1";
 import { HeroOrbit } from "../components/UI/HeroOrbit1";
+import Diorama from "../components/UI/Diorama";
 
 const stats = [
   { title: "Listings", value: "120+", description: "Curated and verified devices" },
@@ -52,7 +53,7 @@ const Home = () => {
           <Reveal>
             <div className="relative rounded-[32px] border border-white/20 bg-linear-to-br from-slate-900 via-indigo-900 to-slate-800 p-6 text-white shadow-xl sm:rounded-[48px] sm:p-10">
               <p className="text-xs uppercase tracking-[0.6em] text-white/60">Laptomania</p>
-              <h1 className="mt-4 text-3xl font-black leading-tight sm:mt-6 sm:text-5xl">
+              <h1 className="mt-6 text-3xl font-black leading-tight sm:mt-8 sm:text-5xl">
                 A design-forward laptop marketplace for collectors, creators, and crews.
               </h1>
               <p className="mt-4 max-w-2xl text-base text-white/80">
@@ -70,6 +71,10 @@ const Home = () => {
                     Go to panel
                   </Button>
                 </Link>
+              </div>
+
+              <div className="mt-10 rounded-[32px] border border-white/15 bg-white/5 p-4 ">
+                <Diorama />
               </div>
             </div>
           </Reveal>

@@ -269,62 +269,51 @@ const Nav = () => {
               Laptomania
             </Link>
 
-            <ul className="hidden items-center gap-1 rounded-full bg-white/10 p-1 text-sm font-medium text-white/70 md:flex">
-              {navLinks.map(link => (
-                <li key={link.href}>
-                  <NavLink
-                    to={link.href}
-                    onClick={onNavigate}
-                    className={({ isActive }) =>
-                      `rounded-full px-4 py-2 transition ${
-                        isActive ? "bg-white text-slate-900" : "hover:bg-white/20 hover:text-white"
-                      }`
-                    }
-                  >
-                    {link.label}
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
+            <div className="hidden md:flex">
+              <ul className="flex items-center gap-1 rounded-full bg-white/10 p-1 text-sm font-medium text-white/70">
+                {navLinks.map(link => (
+                  <li key={link.href}>
+                    <NavLink
+                      to={link.href}
+                      onClick={onNavigate}
+                      className={({ isActive }) =>
+                        `rounded-full px-4 py-2 transition ${
+                          isActive ? "bg-white text-slate-900" : "hover:bg-white/20 hover:text-white"
+                        }`
+                      }
+                    >
+                      {link.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
-            {user?.role === "user" && (
-              <>
-                <Button
-                  variant="ghost"
-                  className="relative hidden rounded-full border border-white/30 px-5 text-white md:inline-flex"
-                  onClick={() => setIsOpen(true)}
-                >
-                  <span className="mr-2">Cart</span>
-                  {itemsInCart > 0 && (
-                    <span className="absolute -right-2 -top-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-xs font-bold">
-                      {itemsInCart}
-                    </span>
-                  )}
-                </Button>
+            <div className="hidden sm:flex items-center gap-2">
+              {user?.role === "user" && (
+                <>
+                  <Button
+                    variant="ghost"
+                    className="relative hidden rounded-full border border-white/30 px-5 text-white md:inline-flex"
+                    onClick={() => setIsOpen(true)}
+                  >
+                    <span className="mr-2">Cart</span>
+                    {itemsInCart > 0 && (
+                      <span className="absolute -right-2 -top-1 inline-flex h-5 w-5 items-center justify-center rounded-full bg-rose-500 text-xs font-bold">
+                        {itemsInCart}
+                      </span>
+                    )}
+                  </Button>
 
-                <button
-                  type="button"
-                  className="relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/30 text-white md:hidden"
-                  onClick={() => setIsOpen(true)}
-                >
-                  <span className="sr-only">Open cart</span>
-                  {itemsInCart > 0 && (
-                    <span className="absolute -right-1 -top-1 inline-flex h-4 w-4 items-center justify-center rounded-full bg-rose-500 text-[11px] font-bold">
-                      {itemsInCart}
-                    </span>
-                  )}
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-5 w-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14h9.75m0 0H19.5a2.25 2.25 0 0 0 2.138-1.59l1.263-4.42A1.125 1.125 0 0 0 21.813 6H5.106m2.394 8L5.106 6m2.394 8-.958 3.351A1.125 1.125 0 0 0 7.64 18h11.61m0 0a1.875 1.875 0 1 1-3.75 0m3.75 0a1.875 1.875 0 1 1-3.75 0m-7.5 0a1.875 1.875 0 1 1-3.75 0m3.75 0a1.875 1.875 0 1 1-3.75 0" />
-                  </svg>
-                </button>
-              </>
-            )}
+                </>
+              )}
 
-            <ThemeToggle />
+              <ThemeToggle />
 
-            <div className="hidden items-center gap-2 md:flex">{renderDesktopActions()}</div>
+              <div className="hidden items-center gap-2 md:flex">{renderDesktopActions()}</div>
+            </div>
 
             <button
               type="button"
@@ -364,6 +353,16 @@ const Nav = () => {
                 </NavLink>
               ))}
             </nav>
+
+            <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white/80">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs uppercase tracking-wide text-white/60">Appearance</p>
+                  <p className="text-base font-semibold text-white">Theme</p>
+                </div>
+                <ThemeToggle />
+              </div>
+            </div>
 
             <div className="mt-6 border-t border-white/10 pt-6">{renderMobileActions()}</div>
           </div>
