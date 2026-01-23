@@ -172,12 +172,9 @@ const Nav = () => {
     };
   }, [isOpen, isMobileMenuOpen]);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     setIsMobileMenuOpen(false);
-    setTimeout(() => {
-      window.location.reload();
-    }, 150);
   };
 
   const onNavigate = () => setIsMobileMenuOpen(false);

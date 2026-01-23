@@ -119,6 +119,7 @@ export const AuthProvider = ({children}) => {
         }
 
         setUser(null);
+        navigate("/login", {replace: true});
 
         toast.update(toastId, {
             render: "Logged out successfully 👋",
