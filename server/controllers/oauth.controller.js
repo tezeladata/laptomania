@@ -1,4 +1,7 @@
-const axios = require("axios")
+const axios = require("axios");
+const User = require("../models/user.model");
+const { createSendToken } = require("./auth.controller");
+const AppError = require("../utils/appError");
 
 const GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/v2/auth";
 const GOOGLE_TOKEN_URL = "https://oauth2.googleapis.com/token"
@@ -17,7 +20,7 @@ const getGoogleAuthUrl = (req, res) => {
     res.redirect(`${GOOGLE_AUTH_URL}?${params.toString()}`)
 }
 
-const googleCallback = async (req, res) => {
+const googleCallback = async (req, res, next) => {
     try {
         const {code} = req.query;
 
@@ -36,8 +39,30 @@ const googleCallback = async (req, res) => {
                 Authorization: `Bearer ${access_token}`
             }
         });
-        console.log(userInfo.data)
+        
+        const {email, name, picture, sub, email_verified} = userInfo.data;
 
+        const redirectUrl = process.env.CLIENT_URL || "http://localhost:5173";
+
+        const user = await User.findOne({oauthid: sub, email});
+        if (user) {
+            return createSendToken(user, 200, res, { redirectUrl });
+        }
+
+        if(!email_verified) {
+            return next(new AppError("Google account not verified", 400))
+        }
+
+        const newUser = await User.create({
+            fullname: name,
+            email,
+            avatar: picture,
+            oauthid: sub,
+            oauthProvider: "google",
+            isVerified: true,
+        })
+
+        createSendToken(newUser, 201, res, { redirectUrl })
     } catch(e) {
         console.log(e)
     }

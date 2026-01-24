@@ -9,6 +9,7 @@ import { Reveal } from "../components/UI/Reveal1";
 const SignUp = () => {
   const { signUp } = useAuth();
   const [formData, handleChange] = useForm({ fullname: "", email: "", password: "" });
+  const googleAuthUrl = `${import.meta.env.VITE_API_URL}/api/oauth/google`;
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -79,6 +80,16 @@ const SignUp = () => {
                 </Button>
               </div>
             </form>
+
+            <div className="mt-6 flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/50">
+              <span className="h-px w-full bg-white/20" />
+              or
+              <span className="h-px w-full bg-white/20" />
+            </div>
+
+            <Button asChild variant="ghost" className="mt-4 w-full border border-white/20 bg-white/5 text-sm text-white">
+              <a href={googleAuthUrl}>Continue with Google</a>
+            </Button>
 
             <p className="mt-6 text-center text-sm text-white/70">
               Already joined?{" "}

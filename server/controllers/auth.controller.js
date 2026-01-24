@@ -3,7 +3,7 @@ const AppError = require("../utils/appError.js");
 const catchAsync = require("../utils/catchAsync.js");
 const sendEmail = require("../utils/email.js");
 
-const createSendToken = (user, statusCode, res) => {
+const createSendToken = (user, statusCode, res, options = {}) => {
     const token = user.signToken();
 
     const cookieOptions = {
@@ -16,7 +16,13 @@ const createSendToken = (user, statusCode, res) => {
 
     user.password = undefined
 
-    res.status(statusCode).cookie("lg", token, cookieOptions).json(user)
+    const response = res.cookie("lg", token, cookieOptions);
+
+    if (options.redirectUrl) {
+        return response.redirect(options.redirectStatus || 302, options.redirectUrl);
+    }
+
+    return response.status(statusCode).json(user)
 }
 
 const signUp = catchAsync(async (req, res, next) => {
@@ -261,4 +267,4 @@ const logOut = catchAsync(async (req, res, next) => {
     res.status(200).send();
 });
 
-module.exports = {signUp, logIn, logOut, verify};
+module.exports = {signUp, logIn, logOut, verify, createSendToken};

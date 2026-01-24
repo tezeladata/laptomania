@@ -18,7 +18,9 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, "Password is required"],
+        required: [function() {
+            return !this.oauthProvider
+        }, "Password is required"],
         minLength: 6,
         maxLength: 12,
         select: false
@@ -37,6 +39,18 @@ const userSchema = new mongoose.Schema({
         default: true
     },
     verificationCode: String,
+    oauthid: {
+        type: String,
+        default: null
+    },
+    oauthProvider: {
+        type: String,
+        enum: ["google", "facebook", "github", null],
+        default: null
+    },
+    avatar: {
+        type: String
+    }
 }, {timestamps: true});
 
 userSchema.pre("save", async function () {

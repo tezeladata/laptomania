@@ -9,6 +9,7 @@ import { Reveal } from "../components/UI/Reveal1";
 const Login = () => {
   const { login } = useAuth();
   const [formData, handleChange] = useForm({ email: "", password: "" });
+  const googleAuthUrl = `${import.meta.env.VITE_API_URL}/api/oauth/google`;
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -63,6 +64,16 @@ const Login = () => {
                 Continue
               </Button>
             </form>
+
+            <div className="flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/50">
+              <span className="h-px w-full bg-white/20" />
+              or
+              <span className="h-px w-full bg-white/20" />
+            </div>
+
+            <Button asChild variant="ghost" className="w-full border border-white/20 bg-white/5 text-sm text-white">
+              <a href={googleAuthUrl}>Continue with Google</a>
+            </Button>
 
             <p className="text-center text-sm text-white/70">
               New to Laptomania?{" "}
