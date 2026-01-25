@@ -14,9 +14,9 @@ const laptopRouter = require("./routers/laptop.router");
 const authRouter = require("./routers/auth.router");
 const oauthRouter = require("./routers/oauth.router");
 
-dotenv.config()
+dotenv.config();
 
-const app = express()
+const app = express();
 
 // Cybersecurity
 app.use(cors({
