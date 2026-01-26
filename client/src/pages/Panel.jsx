@@ -23,7 +23,7 @@ const AddLaptop = () => {
     <Reveal>
       <Card className="p-6 sm:p-8">
         <CardHeader className="p-0 space-y-2">
-          <CardTitle className="text-2xl text-slate-900 dark:text-white">Add Laptop</CardTitle>
+          <CardTitle className="text-2xl text-[color:var(--text-primary)]">Add Laptop</CardTitle>
           <CardDescription>Upload gallery images, rich descriptions, and stock insights in one go.</CardDescription>
         </CardHeader>
 
@@ -90,26 +90,26 @@ const Panel = () => {
 
   return (
     <main className="relative min-h-screen overflow-hidden px-4 py-12 sm:px-6">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_25%,rgba(59,130,246,0.22),transparent_55%),radial-gradient(circle_at_80%_10%,rgba(236,72,153,0.25),transparent_45%),linear-gradient(135deg,#020617,#0f172a)] dark:bg-[radial-gradient(circle_at_15%_25%,rgba(14,165,233,0.2),transparent_55%),radial-gradient(circle_at_80%_0%,rgba(167,139,250,0.25),transparent_45%),linear-gradient(135deg,#01040d,#090f20)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[image:var(--gradient-panel)]" />
 
-      <div className="mx-auto flex max-w-6xl flex-col gap-8">
+      <div className="mx-auto flex max-w-6xl flex-col gap-8 text-[color:var(--text-primary)]">
         <Reveal>
           <Card className="p-6 sm:p-8">
             <CardHeader className="p-0 space-y-2">
-              <CardTitle className="text-3xl text-slate-900 dark:text-white">Panel</CardTitle>
+              <CardTitle className="text-3xl text-[color:var(--text-primary)]">Panel</CardTitle>
               <CardDescription>Manage catalog entries, monitor performance, and collaborate with your crew.</CardDescription>
             </CardHeader>
 
             <CardContent className="mt-6 grid gap-6 p-0 lg:grid-cols-2">
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-slate-500">Full name</p>
-                  <p className="text-xl font-semibold text-slate-900 dark:text-white">{user.fullname}</p>
+                  <p className="text-sm text-[color:var(--text-muted)]">Full name</p>
+                  <p className="text-xl font-semibold text-[color:var(--text-primary)]">{user.fullname}</p>
                 </div>
 
                 <div>
-                  <p className="text-sm text-slate-500">Email address</p>
-                  <p className="text-slate-900 dark:text-white">{user.email}</p>
+                  <p className="text-sm text-[color:var(--text-muted)]">Email address</p>
+                  <p className="text-[color:var(--text-primary)]">{user.email}</p>
                 </div>
 
                 <div>
@@ -120,9 +120,9 @@ const Panel = () => {
                 </div>
               </div>
 
-              <div className="space-y-4 rounded-3xl border border-[color:var(--border-subtle)]/40 bg-gradient-to-br from-white/10 to-slate-100/10 p-5 dark:from-white/5 dark:to-white/0">
-                <p className="text-xs uppercase tracking-[0.4em] text-slate-500">Highlights</p>
-                <ul className="space-y-2 text-sm text-slate-600 dark:text-slate-300">
+              <div className="space-y-4 rounded-3xl border border-[color:var(--surface-border)]/50 bg-linear-to-br from-[color:var(--bg-card)] via-[color:var(--bg-elevated)]/80 to-transparent p-5">
+                <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">Highlights</p>
+                <ul className="space-y-2 text-sm text-[color:var(--text-secondary)]">
                   <li>• Secure access with protected routes</li>
                   <li>• Bulk editing via Catalog view</li>
                   <li>• Drag and drop media uploads</li>
@@ -149,15 +149,15 @@ const Panel = () => {
               <section className="rounded-[32px] border border-transparent bg-transparent p-0 sm:rounded-[40px]">
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
                   <div>
-                    <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Full catalog</h2>
-                    <p className="text-sm text-slate-500 dark:text-slate-400">
+                    <h2 className="text-2xl font-semibold text-[color:var(--text-primary)]">Full catalog</h2>
+                    <p className="text-sm text-[color:var(--text-secondary)]">
                       Inline edits instantly sync across the experience.
                     </p>
                   </div>
-                  <p className="text-xs uppercase tracking-[0.4em] text-slate-500">Live preview</p>
+                  <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">Live preview</p>
                 </div>
 
-                <div className="mt-6 overflow-hidden rounded-[28px] border border-[color:var(--border-subtle)]/40 bg-gradient-to-br from-white/5 to-white/0 shadow-none dark:from-white/5 dark:to-white/0">
+                <div className="mt-6 overflow-hidden rounded-[28px] border border-[color:var(--surface-border)]/50 bg-linear-to-br from-[color:var(--bg-card)] to-transparent shadow-none">
                   <Catalog />
                 </div>
               </section>

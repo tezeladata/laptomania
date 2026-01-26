@@ -29,25 +29,105 @@
 :root {
   color-scheme: light;
   font-family: "Inter", "SF Pro Display", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  background-color: hsl(221 28% 12%);
-  color: hsl(210 33% 96%);
-  --bg-muted: hsl(221 28% 14%);
-  --bg-card: hsla(222 35% 18% / 0.95);
-  --border-subtle: hsla(220 20% 40% / 0.45);
-  --shadow-soft: 0 25px 60px -15px rgba(2, 6, 23, 0.65);
+  background-color: hsl(220 18% 86%);
+  color: hsl(232 33% 12%);
+  --bg-muted: hsl(220 20% 88%);
+  --bg-muted-accent: hsl(220 18% 84%);
+  --bg-card: hsla(220 20% 82% / 0.95);
+  --bg-inset: hsl(220 18% 80%);
+  --bg-elevated: hsla(220 17% 78% / 0.9);
+  --text-primary: hsl(232 33% 12%);
+  --text-secondary: hsla(232 22% 30% / 0.85);
+  --text-muted: hsla(231 20% 45% / 0.75);
+  --surface-border: hsla(220 16% 60% / 0.7);
+  --border-subtle: hsla(220 15% 55% / 0.45);
+  --shadow-soft: 0 20px 40px -18px rgba(15, 23, 42, 0.2);
   --page-blur: none;
   --hover-raise: translateY(-4px);
-  --hover-shadow: 0 20px 40px rgba(2, 6, 23, 0.45);
+  --hover-shadow: 0 16px 30px rgba(15, 23, 42, 0.18);
+  --accent-primary: hsl(244 65% 50%);
+  --accent-primary-hover: hsl(244 65% 44%);
+  --accent-primary-foreground: hsl(0 0% 100%);
+  --accent-soft: color-mix(in srgb, var(--accent-primary) 16%, transparent);
+  --accent-outline: color-mix(in srgb, var(--accent-primary) 38%, transparent);
+  --body-backdrop:
+    radial-gradient(circle at top, rgba(79, 70, 229, 0.1), transparent 45%),
+    radial-gradient(circle at 20% 20%, rgba(14, 165, 233, 0.1), transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(248, 113, 113, 0.12), transparent 35%);
+  --gradient-home:
+    radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.16), transparent 55%),
+    radial-gradient(circle at 80% 0%, rgba(56, 189, 248, 0.18), transparent 50%),
+    linear-gradient(180deg, #dfe3ef, #cfd6e6);
+  --gradient-catalog:
+    radial-gradient(circle at 10% 15%, rgba(59, 130, 246, 0.16), transparent 55%),
+    radial-gradient(circle at 90% 0%, rgba(6, 182, 212, 0.16), transparent 45%),
+    linear-gradient(180deg, #e0e7f0, #ced8e3);
+  --gradient-panel:
+    radial-gradient(circle at 15% 25%, rgba(59, 130, 246, 0.14), transparent 55%),
+    radial-gradient(circle at 80% 10%, rgba(236, 72, 153, 0.14), transparent 45%),
+    linear-gradient(135deg, #dde2ee, #cbd3e3);
+  --gradient-signup:
+    radial-gradient(circle at 15% 15%, rgba(249, 115, 22, 0.14), transparent 60%),
+    radial-gradient(circle at 80% 0%, rgba(59, 130, 246, 0.16), transparent 50%),
+    linear-gradient(150deg, #f3e8dd, #e2e6f2);
+  --gradient-login:
+    radial-gradient(circle at 10% 20%, rgba(129, 140, 248, 0.16), transparent 55%),
+    radial-gradient(circle at 80% 0%, rgba(248, 113, 113, 0.16), transparent 45%),
+    linear-gradient(160deg, #e2e8f3, #d3dae9);
+  --nav-gradient:
+    linear-gradient(90deg, rgba(232, 237, 247, 0.92), rgba(218, 225, 240, 0.92));
+  --footer-gradient:
+    linear-gradient(180deg, rgba(12, 15, 28, 0.05), rgba(5, 8, 16, 0.18));
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
   background-color: hsl(222.2 84% 4.9%);
-  color: hsl(210 40% 98%);
-  --bg-muted: hsla(225 15% 10% / 0.75);
-  --bg-card: hsla(225 25% 12% / 0.85);
+  color: hsl(0 0% 98% / 0.95);
+  --bg-muted: hsla(222 40% 7% / 1);
+  --bg-muted-accent: hsla(220 35% 12% / 0.7);
+  --bg-card: hsla(222 35% 18% / 0.95);
+  --bg-inset: hsla(223 32% 15% / 0.95);
+  --bg-elevated: hsla(220 35% 20% / 0.85);
+  --text-primary: hsl(210 40% 98%);
+  --text-secondary: hsla(210 24% 88% / 0.85);
+  --text-muted: hsla(213 20% 75% / 0.7);
+  --surface-border: hsla(209 24% 30% / 0.7);
   --border-subtle: hsla(209 20% 25% / 0.7);
-  --shadow-soft: 0 20px 40px -15px rgba(0, 0, 0, 0.35);
+  --shadow-soft: 0 20px 40px -15px rgba(0, 0, 0, 0.45);
+  --accent-primary: hsl(246 85% 72%);
+  --accent-primary-hover: hsl(246 82% 66%);
+  --accent-primary-foreground: hsl(228 45% 10%);
+  --accent-soft: color-mix(in srgb, var(--accent-primary) 35%, transparent);
+  --accent-outline: color-mix(in srgb, var(--accent-primary) 60%, transparent);
+  --body-backdrop:
+    radial-gradient(circle at top, rgba(79, 70, 229, 0.35), transparent 45%),
+    radial-gradient(circle at 20% 20%, rgba(14, 165, 233, 0.25), transparent 40%),
+    radial-gradient(circle at 80% 10%, rgba(248, 113, 113, 0.25), transparent 35%);
+  --gradient-home:
+    radial-gradient(circle at 20% 20%, rgba(147, 197, 253, 0.35), transparent 55%),
+    radial-gradient(circle at 80% 0%, rgba(167, 139, 250, 0.35), transparent 50%),
+    linear-gradient(180deg, #050816, #0b1d3a);
+  --gradient-catalog:
+    radial-gradient(circle at 10% 15%, rgba(45, 212, 191, 0.25), transparent 55%),
+    radial-gradient(circle at 90% 0%, rgba(99, 102, 241, 0.28), transparent 45%),
+    linear-gradient(180deg, #030712, #12172c);
+  --gradient-panel:
+    radial-gradient(circle at 15% 25%, rgba(59, 130, 246, 0.22), transparent 55%),
+    radial-gradient(circle at 80% 10%, rgba(236, 72, 153, 0.25), transparent 45%),
+    linear-gradient(135deg, #020617, #0f172a);
+  --gradient-signup:
+    radial-gradient(circle at 15% 15%, rgba(249, 115, 22, 0.25), transparent 60%),
+    radial-gradient(circle at 80% 0%, rgba(59, 130, 246, 0.3), transparent 50%),
+    linear-gradient(150deg, #05080f, #101b34);
+  --gradient-login:
+    radial-gradient(circle at 10% 20%, rgba(129, 140, 248, 0.3), transparent 55%),
+    radial-gradient(circle at 80% 0%, rgba(248, 113, 113, 0.25), transparent 45%),
+    linear-gradient(160deg, #060b1c, #0f1b33);
+  --nav-gradient:
+    linear-gradient(90deg, rgba(5, 8, 22, 0.92), rgba(7, 14, 36, 0.9));
+  --footer-gradient:
+    linear-gradient(180deg, rgba(5, 8, 16, 0.95), rgba(3, 5, 12, 1));
 }
 
 *, *::before, *::after {
@@ -60,12 +140,14 @@ html,
 body {
   min-height: 100%;
   background-color: var(--bg-muted);
+  color: var(--text-primary);
 }
 
 body {
   margin: 0;
   font-size: 16px;
-  color: inherit;
+  color: var(--text-primary);
+  background: var(--bg-muted);
   overflow-x: hidden;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
@@ -75,10 +157,7 @@ body::before {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  background:
-    radial-gradient(circle at top, rgba(79, 70, 229, 0.35), transparent 45%),
-    radial-gradient(circle at 20% 20%, rgba(14, 165, 233, 0.25), transparent 40%),
-    radial-gradient(circle at 80% 10%, rgba(248, 113, 113, 0.25), transparent 35%);
+  background: var(--body-backdrop);
   opacity: 0.35;
   z-index: -1;
 }

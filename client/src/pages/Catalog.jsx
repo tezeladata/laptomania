@@ -63,9 +63,9 @@ const CatalogFilters = ({
   gpuOptions,
   onReset,
 }) => (
-  <div className="mb-10 space-y-4 rounded-[32px] border border-white/10 bg-white/5 p-6 backdrop-blur sm:rounded-[40px]">
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-      <label className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">
+  <div className="mb-10 space-y-4 rounded-[32px] border border-[color:var(--surface-border)] bg-[color:var(--bg-card)]/70 p-6 backdrop-blur sm:rounded-[40px]">
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 text-[color:var(--text-primary)]">
+      <label className="text-xs font-semibold uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
         Brand / model
         <Input
           className="mt-2"
@@ -81,8 +81,8 @@ const CatalogFilters = ({
         </datalist>
       </label>
 
-      <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
-        <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">Price range</p>
+      <div className="rounded-[24px] border border-[color:var(--surface-border)] bg-[color:var(--bg-inset)]/60 p-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.4em] text-[color:var(--text-muted)]">Price range</p>
         <div className="mt-3 grid grid-cols-2 gap-3">
           <Input
             type="number"
@@ -101,10 +101,10 @@ const CatalogFilters = ({
         </div>
       </div>
 
-      <label className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">
+      <label className="text-xs font-semibold uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
         RAM
         <select
-          className="mt-2 h-11 w-full rounded-2xl border border-white/15 bg-transparent px-4 text-sm text-white"
+          className="mt-2 h-11 w-full rounded-2xl border border-[color:var(--surface-border)] bg-transparent px-4 text-sm text-[color:var(--text-primary)]"
           value={ramFilter}
           onChange={event => setRamFilter(event.target.value)}
         >
@@ -117,10 +117,10 @@ const CatalogFilters = ({
         </select>
       </label>
 
-      <label className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400">
+      <label className="text-xs font-semibold uppercase tracking-[0.4em] text-[color:var(--text-muted)]">
         GPU
         <select
-          className="mt-2 h-11 w-full rounded-2xl border border-white/15 bg-transparent px-4 text-sm text-white"
+          className="mt-2 h-11 w-full rounded-2xl border border-[color:var(--surface-border)] bg-transparent px-4 text-sm text-[color:var(--text-primary)]"
           value={gpuFilter}
           onChange={event => setGpuFilter(event.target.value)}
         >
@@ -135,10 +135,10 @@ const CatalogFilters = ({
     </div>
 
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <label className="flex w-full flex-col text-xs font-semibold uppercase tracking-[0.4em] text-slate-400 sm:w-auto">
+      <label className="flex w-full flex-col text-xs font-semibold uppercase tracking-[0.4em] text-[color:var(--text-muted)] sm:w-auto">
         Sort by
         <select
-          className="mt-2 h-11 rounded-2xl border border-white/15 bg-transparent px-4 text-sm text-white"
+          className="mt-2 h-11 rounded-2xl border border-[color:var(--surface-border)] bg-transparent px-4 text-sm text-[color:var(--text-primary)]"
           value={sortBy}
           onChange={event => setSortBy(event.target.value)}
         >
@@ -152,7 +152,7 @@ const CatalogFilters = ({
 
       <button
         type="button"
-        className="self-start text-sm font-semibold text-indigo-200 underline-offset-4 hover:underline"
+        className="self-start text-sm font-semibold text-[color:var(--accent-primary)] underline-offset-4 hover:underline"
         onClick={onReset}
       >
         Reset filters
@@ -171,7 +171,7 @@ const LaptopDetails = ({ laptop, onClose }) => {
       <div className="pointer-events-none relative z-10 flex min-h-screen items-center justify-center px-4 py-10 sm:py-16">
         <div className="pointer-events-auto w-full max-w-4xl rounded-[32px] border border-white/15 bg-(--bg-card)/95 p-6 shadow-2xl dark:bg-slate-950 sm:rounded-[48px] sm:p-10">
           <button
-            className="absolute right-5 top-5 rounded-full border border-slate-200/40 px-3 py-1 text-sm text-slate-300 hover:text-white dark:border-slate-700 sm:right-6 sm:top-6"
+            className="absolute right-5 top-5 rounded-full border border-[color:var(--surface-border)]/70 px-3 py-1 text-sm text-[color:var(--text-secondary)] hover:text-[color:var(--text-primary)] sm:right-6 sm:top-6"
             onClick={onClose}
           >
             ✕
@@ -191,14 +191,14 @@ const LaptopDetails = ({ laptop, onClose }) => {
 
             <div className="space-y-4">
               <div>
-                <p className="text-xs uppercase tracking-[0.5em] text-indigo-400">Laptop profile</p>
-                <h2 className="mt-3 text-2xl font-black text-white sm:text-3xl">
+                <p className="text-xs uppercase tracking-[0.5em] text-[color:var(--text-muted)]">Laptop profile</p>
+                <h2 className="mt-3 text-2xl font-black text-[color:var(--text-primary)] sm:text-3xl">
                   {laptop.brand} {laptop.model}
                 </h2>
-                <p className="text-sm text-slate-300">{laptop.description}</p>
+                <p className="text-sm text-[color:var(--text-secondary)]">{laptop.description}</p>
               </div>
 
-              <div className="grid grid-cols-1 gap-4 text-sm text-slate-200 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 text-sm text-[color:var(--text-secondary)] sm:grid-cols-2">
                 {[
                   ["Processor", laptop.processor],
                   ["Memory", laptop.ram],
@@ -208,16 +208,16 @@ const LaptopDetails = ({ laptop, onClose }) => {
                   ["OS", laptop.os],
                 ].map(([label, value]) => (
                   <div key={label}>
-                    <p className="text-xs uppercase tracking-[0.4em] text-slate-500">{label}</p>
-                    <p className="font-semibold text-white">{value}</p>
+                    <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">{label}</p>
+                    <p className="font-semibold text-[color:var(--text-primary)]">{value}</p>
                   </div>
                 ))}
               </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-4 rounded-[24px] border border-white/10 bg-white/5 px-5 py-4">
+              <div className="flex flex-wrap items-center justify-between gap-4 rounded-[24px] border border-[color:var(--surface-border)] bg-[color:var(--bg-inset)] px-5 py-4">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.4em] text-slate-400">Price</p>
-                  <p className="text-2xl font-bold text-white">${laptop.price}</p>
+                  <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">Price</p>
+                  <p className="text-2xl font-bold text-[color:var(--text-primary)]">${laptop.price}</p>
                 </div>
                 <Badge variant="default" className="text-xs">
                   In stock: {laptop.stock}
@@ -259,7 +259,7 @@ const Laptop = ({ laptop, onOpenDetails }) => {
   return (
     <Reveal>
       <Card
-        className="interactive-card flex h-full flex-col rounded-[28px] border border-(--border-subtle) bg-(--bg-card)/95 shadow-(--shadow-soft) dark:bg-slate-900/60 sm:rounded-[36px]"
+        className="interactive-card flex h-full flex-col rounded-[28px] border border-[color:var(--surface-border)] bg-[color:var(--bg-card)]/95 shadow-[var(--shadow-soft)] sm:rounded-[36px]"
         style={{ "--tilt-x": `${tilt.x}deg`, "--tilt-y": `${tilt.y}deg` }}
         onMouseMove={handleTilt}
         onMouseLeave={() => setTilt({ x: 0, y: 0 })}
@@ -268,7 +268,7 @@ const Laptop = ({ laptop, onOpenDetails }) => {
           <button
             type="button"
             onClick={() => onOpenDetails(laptop)}
-            className="grid grid-cols-2 gap-3 rounded-[24px] border border-white/20 p-1 transition hover:border-indigo-300 sm:grid-cols-3"
+            className="grid grid-cols-2 gap-3 rounded-[24px] border border-[color:var(--surface-border)] p-1 transition hover:border-[color:var(--accent-outline)] sm:grid-cols-3"
           >
             {laptop.images.map(image => (
               <div key={image._id} className="overflow-hidden rounded-[18px] sm:rounded-[22px]">
@@ -277,10 +277,10 @@ const Laptop = ({ laptop, onOpenDetails }) => {
             ))}
           </button>
           <div>
-            <CardTitle className="text-2xl text-white">
+            <CardTitle className="text-2xl text-[color:var(--text-primary)]">
               {laptop.brand} {laptop.model}
             </CardTitle>
-            <CardDescription className="text-slate-300">
+            <CardDescription className="text-[color:var(--text-secondary)]">
               {laptop.tagline || "Studio-grade performance wrapped in a portable chassis."}
             </CardDescription>
           </div>
@@ -319,19 +319,19 @@ const Laptop = ({ laptop, onOpenDetails }) => {
                 ["Display", laptop.display],
                 ["OS", laptop.os],
               ].map(([label, value]) => (
-                <p key={label} className="text-sm">
-                  <span className="text-white/60">{label}:</span> <span className="font-medium text-white">{value}</span>
+                <p key={label} className="text-sm text-[color:var(--text-secondary)]">
+                  <span className="text-[color:var(--text-muted)]">{label}:</span> <span className="font-medium text-[color:var(--text-primary)]">{value}</span>
                 </p>
               ))}
-              <p className="pt-2 text-sm text-slate-300 sm:col-span-2">{laptop.description}</p>
+              <p className="pt-2 text-sm text-[color:var(--text-secondary)] sm:col-span-2">{laptop.description}</p>
             </div>
           )}
         </CardContent>
 
-        <div className="flex flex-col gap-4 rounded-b-[28px] border-t border-white/15 bg-white/5 p-5 dark:bg-slate-900/40 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 rounded-b-[28px] border-t border-[color:var(--surface-border)] bg-[color:var(--bg-inset)]/80 p-5 sm:flex-row sm:items-center sm:justify-between">
           <div className="space-y-1">
-            <p className="text-lg font-semibold text-white">${laptop.price}</p>
-            <p className="text-xs uppercase tracking-[0.4em] text-slate-400">Stock {laptop.stock}</p>
+            <p className="text-lg font-semibold text-[color:var(--text-primary)]">${laptop.price}</p>
+            <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">Stock {laptop.stock}</p>
           </div>
 
           <div className="flex flex-1 flex-wrap items-center justify-end gap-2">
@@ -363,7 +363,7 @@ const LaptopList = ({ laptops, onOpenDetails }) => {
   if (!laptops?.length) {
     return (
       <Reveal>
-        <div className="rounded-[32px] border border-dashed border-slate-200 bg-(--bg-card) p-10 text-center text-slate-500 sm:rounded-[40px]">
+        <div className="rounded-[32px] border border-dashed border-[color:var(--surface-border)] bg-[color:var(--bg-card)] p-10 text-center text-[color:var(--text-secondary)] sm:rounded-[40px]">
           No laptops found. Check back soon!
         </div>
       </Reveal>
@@ -455,23 +455,23 @@ const Catalog = () => {
 
   return (
     <main className="relative min-h-screen overflow-hidden">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_10%_15%,rgba(45,212,191,0.25),transparent_55%),radial-gradient(circle_at_90%_0%,rgba(99,102,241,0.28),transparent_45%),linear-gradient(180deg,#030712,#12172c)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[image:var(--gradient-catalog)]" />
 
-      <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16">
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:py-16 text-[color:var(--text-primary)]">
         <Reveal>
-          <div className="mb-10 flex flex-col gap-6 rounded-[32px] border border-white/15 bg-white/5 p-6 shadow-lg sm:rounded-[48px] sm:flex-row sm:items-center sm:justify-between sm:p-8">
+          <div className="mb-10 flex flex-col gap-6 rounded-[32px] border border-[color:var(--surface-border)] bg-[color:var(--bg-card)]/80 p-6 shadow-lg sm:rounded-[48px] sm:flex-row sm:items-center sm:justify-between sm:p-8">
             <div className="space-y-3">
-              <p className="text-xs uppercase tracking-[0.6em] text-indigo-300">Catalogue</p>
-              <h1 className="text-3xl font-black text-white sm:text-4xl">
+              <p className="text-xs uppercase tracking-[0.6em] text-[color:var(--text-muted)]">Catalogue</p>
+              <h1 className="text-3xl font-black text-[color:var(--text-primary)] sm:text-4xl">
                 Curated laptops for every creator
               </h1>
-              <p className="text-sm text-slate-300">
+              <p className="text-sm text-[color:var(--text-secondary)]">
                 {user ? `Signed in as ${user.email}` : "Explore the collection and find your next machine."}
               </p>
             </div>
 
-            <div className="space-y-3 rounded-[24px] border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
-              <p className="font-semibold text-white">Need help deciding?</p>
+            <div className="space-y-3 rounded-[24px] border border-[color:var(--surface-border)] bg-[color:var(--bg-inset)] p-4 text-sm text-[color:var(--text-secondary)]">
+              <p className="font-semibold text-[color:var(--text-primary)]">Need help deciding?</p>
               <p>Use the panel to manage inventory or add laptops to your cart.</p>
             </div>
           </div>

@@ -5,13 +5,13 @@ const baseStyles =
 
 const variants = {
   default:
-    "bg-indigo-600 text-white shadow hover:-translate-y-0.5 hover:bg-indigo-500 focus-visible:ring-indigo-400 dark:bg-indigo-500 dark:hover:bg-indigo-400",
+    "bg-[color:var(--accent-primary)] text-[color:var(--accent-primary-foreground)] shadow hover:-translate-y-0.5 hover:bg-[color:var(--accent-primary-hover)] focus-visible:ring-indigo-400",
   ghost:
-    "bg-transparent text-white hover:bg-white/10 dark:text-slate-100 dark:hover:bg-slate-800",
+    "bg-transparent text-[color:var(--text-primary)] hover:bg-[color:var(--accent-soft)]",
   outline:
-    "border border-slate-200 text-slate-900 hover:bg-slate-50 dark:border-slate-700 dark:text-white dark:hover:bg-slate-800",
+    "border border-[color:var(--surface-border)] text-[color:var(--text-primary)] hover:bg-[color:var(--bg-inset)]",
   subtle:
-    "bg-slate-100 text-slate-900 hover:bg-slate-200 dark:bg-slate-800 dark:text-white dark:hover:bg-slate-700",
+    "bg-[color:var(--bg-inset)] text-[color:var(--text-primary)] hover:bg-[color:var(--bg-muted-accent)]",
 };
 
 const sizes = {

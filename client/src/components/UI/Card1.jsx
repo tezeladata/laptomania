@@ -5,7 +5,7 @@ export function Card({ className = "", ...props }) {
     <div
       data-card
       className={cn(
-        "card-hover rounded-3xl border border-[color:var(--border-subtle)] bg-[color:var(--bg-card)] shadow-[var(--shadow-soft)] backdrop-blur",
+        "card-hover rounded-3xl border border-[color:var(--surface-border)] bg-[color:var(--bg-card)] text-[color:var(--text-primary)] shadow-[var(--shadow-soft)] backdrop-blur",
         className
       )}
       {...props}
@@ -18,11 +18,11 @@ export function CardHeader({ className = "", ...props }) {
 }
 
 export function CardTitle({ className = "", ...props }) {
-  return <h3 className={cn("text-lg font-semibold leading-none tracking-tight", className)} {...props} />;
+  return <h3 className={cn("text-lg font-semibold leading-none tracking-tight text-[color:var(--text-primary)]", className)} {...props} />;
 }
 
 export function CardDescription({ className = "", ...props }) {
-  return <p className={cn("text-sm text-slate-500 dark:text-slate-400", className)} {...props} />;
+  return <p className={cn("text-sm text-[color:var(--text-secondary)]", className)} {...props} />;
 }
 
 export function CardContent({ className = "", ...props }) {

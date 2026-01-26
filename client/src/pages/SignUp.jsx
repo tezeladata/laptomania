@@ -18,22 +18,22 @@ const SignUp = () => {
 
   return (
     <main className="relative min-h-screen overflow-hidden px-4 py-12 sm:py-16">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_15%_15%,rgba(249,115,22,0.25),transparent_60%),radial-gradient(circle_at_80%_0%,rgba(59,130,246,0.3),transparent_50%),linear-gradient(150deg,#05080f,#101b34)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[image:var(--gradient-signup)]" />
 
       <Reveal>
-        <Card className="mx-auto w-full max-w-xl bg-white/10 p-6 text-white backdrop-blur sm:max-w-2xl sm:p-10">
+        <Card className="mx-auto w-full max-w-xl bg-[color:var(--bg-card)]/85 p-6 text-[color:var(--text-primary)] backdrop-blur sm:max-w-2xl sm:p-10">
           <CardHeader className="space-y-3 p-0">
-            <p className="text-xs uppercase tracking-[0.4em] text-indigo-200">Join</p>
-            <CardTitle className="text-3xl text-white">Create an account</CardTitle>
-            <p className="text-sm text-white/70">
+            <p className="text-xs uppercase tracking-[0.4em] text-[color:var(--text-muted)]">Join</p>
+            <CardTitle className="text-3xl text-[color:var(--text-primary)]">Create an account</CardTitle>
+            <p className="text-sm text-[color:var(--text-secondary)]">
               Unlock curated wishlists, personalized collections, and the management panel tailored to your role.
             </p>
           </CardHeader>
 
-          <CardContent className="mt-8 p-0">
+          <CardContent className="mt-8 p-0 text-[color:var(--text-primary)]">
             <form onSubmit={handleSubmit} className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="fullname" className="text-indigo-100">
+                <Label htmlFor="fullname" className="text-[color:var(--text-muted)]">
                   Full name
                 </Label>
                 <Input
@@ -47,7 +47,7 @@ const SignUp = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-indigo-100">
+                <Label htmlFor="email" className="text-[color:var(--text-muted)]">
                   Email
                 </Label>
                 <Input
@@ -61,7 +61,7 @@ const SignUp = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-indigo-100">
+                <Label htmlFor="password" className="text-[color:var(--text-muted)]">
                   Password
                 </Label>
                 <Input
@@ -81,16 +81,16 @@ const SignUp = () => {
               </div>
             </form>
 
-            <div className="mt-6 flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-white/50">
-              <span className="h-px w-full bg-white/20" />
+            <div className="mt-6 flex items-center gap-4 text-xs uppercase tracking-[0.3em] text-[color:var(--text-muted)]">
+              <span className="h-px w-full bg-[color:var(--surface-border)]" />
               or
-              <span className="h-px w-full bg-white/20" />
+              <span className="h-px w-full bg-[color:var(--surface-border)]" />
             </div>
 
             <Button
               asChild
               variant="ghost"
-              className="mt-4 w-full border border-white/20 bg-white/5 text-sm text-white"
+              className="mt-4 w-full border border-[color:var(--surface-border)] bg-[color:var(--bg-inset)] text-sm text-[color:var(--text-primary)]"
             >
               <a href={googleAuthUrl} className="flex items-center justify-center gap-3">
                 <svg
@@ -120,9 +120,9 @@ const SignUp = () => {
               </a>
             </Button>
 
-            <p className="mt-6 text-center text-sm text-white/70">
+            <p className="mt-6 text-center text-sm text-[color:var(--text-secondary)]">
               Already joined?{" "}
-              <Link to="/login" className="font-semibold text-indigo-200 hover:underline">
+              <Link to="/login" className="font-semibold text-[color:var(--accent-primary)] hover:underline">
                 Return to login
               </Link>
             </p>
