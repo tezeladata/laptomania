@@ -16,6 +16,15 @@ export function Reveal({ as: Component = "div", variant = "up", className = "", 
     const node = ref.current;
     if (!node) return;
 
+    const prefersReducedMotion =
+      typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const supportsIntersectionObserver = typeof window !== "undefined" && "IntersectionObserver" in window;
+
+    if (!supportsIntersectionObserver || prefersReducedMotion) {
+      node.classList.add("reveal-visible");
+      return;
+    }
+
     const observer = new IntersectionObserver(
       entries => {
         entries.forEach(entry => {
