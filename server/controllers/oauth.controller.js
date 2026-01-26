@@ -44,8 +44,16 @@ const googleCallback = async (req, res, next) => {
 
         const redirectUrl = process.env.CLIENT_URL || "http://localhost:5173";
 
-        const user = await User.findOne({oauthid: sub, email});
+        let user = await User.findOne({ $or: [{ oauthid: sub }, { email }] });
         if (user) {
+            if (!user.oauthid) {
+                user.oauthid = sub;
+                user.oauthProvider = "google";
+                if (!user.avatar && picture) {
+                    user.avatar = picture;
+                }
+                await user.save();
+            }
             return createSendToken(user, 200, res, { redirectUrl });
         }
 
@@ -64,8 +72,95 @@ const googleCallback = async (req, res, next) => {
 
         createSendToken(newUser, 201, res, { redirectUrl })
     } catch(e) {
-        console.log(e)
+        console.error("Google OAuth error:", e.response?.data || e.message || e);
+        return next(new AppError("Unable to authenticate with Google. Please try again.", 500));
     }
 };
 
-module.exports = {googleCallback, getGoogleAuthUrl}
+const FACEBOOK_AUTH_URL = "https://www.facebook.com/v17.0/dialog/oauth";
+const FACEBOOK_TOKEN_URL = "https://graph.facebook.com/v17.0/oauth/access_token";
+const FACEBOOK_USERINFO_URL = "https://graph.facebook.com/me";
+const FACEBOOK_REDIRECT_URI = process.env.FACEBOOK_REDIRECT_URI || "http://localhost:3000/api/oauth/facebook/callback";
+const FACEBOOK_CLIENT_ID = process.env.FACEBOOK_APP_ID;
+const FACEBOOK_CLIENT_SECRET = process.env.FACEBOOK_APP_SECRET;
+
+const getFacebookAuthUrl = (req, res) => {
+    const params = new URLSearchParams({
+        client_id: FACEBOOK_CLIENT_ID,
+        redirect_uri: FACEBOOK_REDIRECT_URI,
+        scope: "public_profile,email",
+        response_type: "code"
+    });
+
+    res.redirect(`${FACEBOOK_AUTH_URL}?${params.toString()}`)
+};
+
+const facebookCallback = async (req, res, next) => {
+    try {
+        const { code } = req.query;
+
+        if (!code) {
+            return next(new AppError("Missing authorization code", 400));
+        }
+
+        const tokenResponse = await axios.get(FACEBOOK_TOKEN_URL, {
+            params: {
+                client_id: FACEBOOK_CLIENT_ID,
+                client_secret: FACEBOOK_CLIENT_SECRET,
+                redirect_uri: FACEBOOK_REDIRECT_URI,
+                code,
+            }
+        });
+
+        const { access_token } = tokenResponse.data;
+
+        if (!access_token) {
+            return next(new AppError("Unable to retrieve Facebook access token", 500));
+        }
+
+        const userInfo = await axios.get(FACEBOOK_USERINFO_URL, {
+            params: {
+                fields: "id,name,email,picture.width(400)",
+                access_token
+            }
+        });
+
+        const { id, name, email, picture } = userInfo.data;
+
+        if (!email) {
+            return next(new AppError("Facebook account email permission is required", 400));
+        }
+
+        const redirectUrl = process.env.CLIENT_URL || "http://localhost:5173";
+        const avatar = picture?.data?.url;
+
+        let user = await User.findOne({ $or: [{ oauthid: id }, { email }] });
+        if (user) {
+            if (!user.oauthid) {
+                user.oauthid = id;
+                user.oauthProvider = "facebook";
+                if (!user.avatar && avatar) {
+                    user.avatar = avatar;
+                }
+                await user.save();
+            }
+            return createSendToken(user, 200, res, { redirectUrl });
+        }
+
+        const newUser = await User.create({
+            fullname: name,
+            email,
+            avatar,
+            oauthid: id,
+            oauthProvider: "facebook",
+            isVerified: true,
+        });
+
+        return createSendToken(newUser, 201, res, { redirectUrl });
+    } catch (e) {
+        console.error("Facebook OAuth error:", e.response?.data || e.message || e);
+        return next(new AppError("Unable to authenticate with Facebook. Please try again.", 500));
+    }
+};
+
+module.exports = {googleCallback, getGoogleAuthUrl, getFacebookAuthUrl, facebookCallback}
