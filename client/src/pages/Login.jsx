@@ -10,6 +10,7 @@ const Login = () => {
   const { login } = useAuth();
   const [formData, handleChange] = useForm({ email: "", password: "" });
   const googleAuthUrl = `${import.meta.env.VITE_API_URL}/api/oauth/google`;
+  const githubAuthUrl = `${import.meta.env.VITE_API_URL}/api/oauth/github`;
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -101,6 +102,29 @@ const Login = () => {
                   />
                 </svg>
                 <span>Continue with Google</span>
+              </a>
+            </Button>
+
+            <Button
+              asChild
+              variant="ghost"
+              className="w-full border border-[color:var(--surface-border)] bg-[color:var(--bg-inset)] text-sm text-[color:var(--text-primary)]"
+            >
+              <a href={githubAuthUrl} className="flex items-center justify-center gap-3">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                  className="h-5 w-5"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M12 .5C5.648.5.5 5.648.5 12a11.5 11.5 0 0 0 7.85 10.911c.574.107.783-.248.783-.553 0-.272-.01-.995-.015-1.953-3.192.694-3.868-1.54-3.868-1.54-.522-1.327-1.276-1.68-1.276-1.68-1.043-.713.079-.698.079-.698 1.153.081 1.761 1.185 1.761 1.185 1.025 1.755 2.69 1.248 3.345.954.104-.743.401-1.248.728-1.535-2.549-.289-5.228-1.274-5.228-5.67 0-1.252.447-2.276 1.182-3.077-.118-.29-.512-1.453.112-3.03 0 0 .964-.308 3.16 1.175a10.89 10.89 0 0 1 5.756 0c2.195-1.483 3.158-1.175 3.158-1.175.626 1.577.232 2.74.114 3.03.737.801 1.18 1.825 1.18 3.077 0 4.407-2.683 5.378-5.242 5.663.413.354.781 1.05.781 2.118 0 1.528-.014 2.761-.014 3.138 0 .308.206.665.79.552A11.503 11.503 0 0 0 23.5 12C23.5 5.648 18.352.5 12 .5"
+                    fill="currentColor"
+                  />
+                </svg>
+                <span>Continue with GitHub</span>
               </a>
             </Button>
 

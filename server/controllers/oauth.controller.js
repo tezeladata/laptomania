@@ -163,4 +163,121 @@ const facebookCallback = async (req, res, next) => {
     }
 };
 
-module.exports = {googleCallback, getGoogleAuthUrl, getFacebookAuthUrl, facebookCallback}
+const getGithubAuthUrl = (req, res) => {
+    const rootUrl = 'https://github.com/login/oauth/authorize';
+    const params = new URLSearchParams({
+        client_id: process.env.GITHUB_CLIENT_ID,
+        redirect_uri: process.env.GITHUB_REDIRECT_URI,
+        scope: `read:user user:email`
+    });
+
+    res.redirect(`${rootUrl}?${params.toString()}`)
+};
+
+const githubCallback = async (req, res, next) => {
+    try {
+        const { code } = req.query;
+
+        if (!code) {
+            return next(new AppError("Missing authorization code", 400));
+        }
+
+        const tokenResponse = await axios.post(
+            "https://github.com/login/oauth/access_token",
+            {
+                client_id: process.env.GITHUB_CLIENT_ID,
+                client_secret: process.env.GITHUB_CLIENT_SECRET,
+                code,
+                redirect_uri: process.env.GITHUB_REDIRECT_URI
+            },
+            {
+                headers: { Accept: "application/json" }
+            }
+        );
+
+        const access_token = tokenResponse.data?.access_token;
+
+        if (!access_token) {
+            return next(new AppError("Unable to retrieve GitHub access token", 500));
+        }
+
+        const userInfo = await axios.get("https://api.github.com/user", {
+            headers: {
+                Authorization: `Bearer ${access_token}`,
+                Accept: "application/vnd.github+json"
+            }
+        });
+
+        let { id, name, email, avatar_url, login } = userInfo.data;
+
+        if (!email) {
+            const emailResponse = await axios.get("https://api.github.com/user/emails", {
+                headers: {
+                    Authorization: `Bearer ${access_token}`,
+                    Accept: "application/vnd.github+json"
+                }
+            });
+
+            const primaryEmail = emailResponse.data?.find(emailInfo => emailInfo.primary && emailInfo.verified);
+            const verifiedEmail = primaryEmail || emailResponse.data?.find(emailInfo => emailInfo.verified);
+            email = primaryEmail?.email || verifiedEmail?.email;
+        }
+
+        if (!email) {
+            return next(new AppError("GitHub account email permission is required", 400));
+        }
+
+        const redirectUrl = process.env.CLIENT_URL || "http://localhost:5173";
+        const githubId = id?.toString();
+
+        let user = await User.findOne({ $or: [{ oauthid: githubId }, { email }] });
+
+        if (user) {
+            let updated = false;
+            if (!user.oauthid) {
+                user.oauthid = githubId;
+                user.oauthProvider = "github";
+                updated = true;
+            }
+            if (!user.avatar && avatar_url) {
+                user.avatar = avatar_url;
+                updated = true;
+            }
+            if (!user.fullname && (name || login)) {
+                user.fullname = name || login;
+                updated = true;
+            }
+            if (!user.isVerified) {
+                user.isVerified = true;
+                updated = true;
+            }
+            if (updated) {
+                await user.save();
+            }
+            return createSendToken(user, 200, res, { redirectUrl });
+        }
+
+        const displayName = name || login;
+
+        const newUser = await User.create({
+            fullname: displayName,
+            email,
+            avatar: avatar_url,
+            oauthid: githubId,
+            oauthProvider: "github",
+            isVerified: true
+        });
+
+        return createSendToken(newUser, 201, res, { redirectUrl });
+    } catch (e) {
+        console.error("GitHub OAuth error:", {
+            message: e.message,
+            response: e.response?.data,
+            status: e.response?.status,
+            stack: e.stack
+        });
+        return next(new AppError("Unable to authenticate with GitHub. Please try again.", 500));
+    }
+}
+
+module.exports = {googleCallback, getGoogleAuthUrl, getFacebookAuthUrl, facebookCallback, getGithubAuthUrl, githubCallback}

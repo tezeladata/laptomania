@@ -26,6 +26,13 @@
   text-transform: uppercase;
 }
 
+select option,
+select optgroup,
+select {
+  color: var(--text-primary);
+  background-color: var(--bg-card);
+}
+
 :root {
   color-scheme: light;
   font-family: "Inter", "SF Pro Display", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
