@@ -9,8 +9,9 @@ import { Reveal } from "../components/UI/Reveal1";
 const Login = () => {
   const { login } = useAuth();
   const [formData, handleChange] = useForm({ email: "", password: "" });
-  const googleAuthUrl = `${import.meta.env.VITE_API_URL}/api/oauth/google`;
-  const githubAuthUrl = `${import.meta.env.VITE_API_URL}/api/oauth/github`;
+  const apiBaseUrl = (import.meta.env.VITE_API_URL || (typeof window !== "undefined" ? window.location.origin : "")).replace(/\/$/, "");
+  const googleAuthUrl = `${apiBaseUrl}/api/oauth/google`;
+  const githubAuthUrl = `${apiBaseUrl}/api/oauth/github`;
 
   const handleSubmit = e => {
     e.preventDefault();
