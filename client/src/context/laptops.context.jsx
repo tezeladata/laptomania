@@ -154,13 +154,36 @@ export const LaptopProvider = ({children}) => {
         setCart([]);
     }
 
+    const proceedToCheckout = async () => {
+        try {
+            const response = await fetch(`${API_URL}/payment`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(cart.map(prod => prod._id)),
+                credentials: "include"
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message)
+            }
+
+            window.location.href = data.url
+        } catch(err) {
+            console.log(err);
+        }
+    }
+
     useEffect(() => {
         getLaptops();
     }, [])
 
 
     return (
-        <LaptopContext.Provider value={{laptops, deleteLaptop, updateLaptop, addLaptop, addToCart, reduceOne, removeProduct, clearCart, cart}}>
+        <LaptopContext.Provider value={{laptops, deleteLaptop, updateLaptop, addLaptop, addToCart, reduceOne, removeProduct, clearCart, cart, proceedToCheckout}}>
             {children}
         </LaptopContext.Provider>
     )

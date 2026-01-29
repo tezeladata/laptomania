@@ -13,6 +13,7 @@ const helmet = require("helmet");
 const laptopRouter = require("./routers/laptop.router");
 const authRouter = require("./routers/auth.router");
 const oauthRouter = require("./routers/oauth.router");
+const { paymentRouter } = require("./routers/payment.router");
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ app.use(cookieParser());
 app.use("/api/laptops", laptopRouter);
 app.use("/api/auth", authRouter)
 app.use("/api/oauth", oauthRouter);
+app.use("/api/payment", paymentRouter)
 
 // global error handler
 app.use(globalErrorHandler)

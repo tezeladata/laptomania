@@ -70,6 +70,7 @@ const CartPanel = ({ cart, isOpen, onClose, reduceOne, addToCart, removeProduct,
   const hasItems = cart.length > 0;
   const totalItems = cart.reduce((p, c) => p + c.quantity, 0);
   const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const {proceedToCheckout} = useLaptop()
 
   return (
     <CartPortal>
@@ -126,8 +127,8 @@ const CartPanel = ({ cart, isOpen, onClose, reduceOne, addToCart, removeProduct,
                   Taxes and shipping calculated at checkout.
                 </p>
                 <div className="flex flex-col gap-3 sm:flex-row">
-                  <Button className="flex-1 rounded-full bg-[color:var(--accent-primary)] text-[color:var(--accent-primary-foreground)] hover:bg-[color:var(--accent-primary-hover)]">
-                    Checkout (coming soon)
+                  <Button onClick={proceedToCheckout} className="flex-1 rounded-full bg-[color:var(--accent-primary)] text-[color:var(--accent-primary-foreground)] hover:bg-[color:var(--accent-primary-hover)]">
+                    Checkout
                   </Button>
                   <Button
                     type="button"
